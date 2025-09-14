@@ -1,0 +1,492 @@
+<!doctype html>
+<!-- Archivo generado a partir de dashboard.html, renombrado a modulo-estudiante.html -->
+<!-- Contiene el módulo completo para Estudiante: Dashboard, Solicitudes, Seguimiento, Asistente IA y Notificaciones -->
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Módulo — Estudiante</title>
+    <link rel="preload" as="image" href="recursos/logo.png" />
+    <link rel="preload" as="image" href="recursos/logo.png" />
+    <link rel="stylesheet" href="modulo-estudiante.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="brand-bar">
+          <img src="recursos/logo.png" alt="UTEQ" />
+        </div>
+        <nav class="nav">
+          <p class="nav__section">Principal</p>
+          <a class="nav__item active" href="#" data-key="dashboard">Dashboard</a>
+          <a class="nav__item" href="#" data-key="solicitudes">Solicitudes</a>
+          <a class="nav__item" href="#" data-key="seguimiento">Seguimiento</a>
+          <p class="nav__section">Herramientas</p>
+          <a class="nav__item" href="#" data-key="asistente">Asistente IA</a>
+          <a class="nav__item" href="#" data-key="notificaciones">Notificaciones</a>
+        </nav>
+        <div class="user">
+          <div class="avatar">K</div>
+          <div class="user__info">
+            <div class="user__name">Khriz Coronel</div>
+            <div class="user__role">Estudiante</div>
+          </div>
+          <button class="power" title="Cerrar sesión" aria-label="Cerrar sesión">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M15 4h4v16h-4"/>
+              <path d="M10 7l5 5-5 5"/>
+              <path d="M15 12H3"/>
+            </svg>
+          </button>
+        </div>
+      </aside>
+
+      <main class="content">
+        <header class="top">
+          <h1 id="page-title">Panel de control principal</h1>
+          <div class="spacer"></div>
+        </header>
+
+        <!-- Vista: Dashboard -->
+        <section id="view-dashboard" class="view view--active">
+          <section class="stats">
+          <div class="stat">
+            <div class="stat__icon">✉️</div>
+            <div class="stat__value">12</div>
+            <div class="stat__label">Solicitudes enviadas</div>
+          </div>
+          <div class="stat">
+            <div class="stat__icon">📈</div>
+            <div class="stat__value">5</div>
+            <div class="stat__label">Solicitudes en proceso</div>
+          </div>
+          <div class="stat">
+            <div class="stat__icon">✅</div>
+            <div class="stat__value">6</div>
+            <div class="stat__label">Solicitudes resueltas</div>
+          </div>
+          <div class="stat">
+            <div class="stat__icon">🚫</div>
+            <div class="stat__value">1</div>
+            <div class="stat__label">Solicitudes rechazadas</div>
+          </div>
+          <div class="stat">
+            <div class="stat__icon">👍</div>
+            <div class="stat__value">11</div>
+            <div class="stat__label">Solicitudes completadas</div>
+          </div>
+          </section>
+
+          <section class="grid">
+          <article class="panel span-2" aria-labelledby="p-env-mes">
+            <div class="panel__header">
+              <h2 id="p-env-mes">Solicitudes enviadas por mes</h2>
+            </div>
+            <div class="bars" id="bars"></div>
+            <div class="bars__labels" id="bars-labels"></div>
+          </article>
+
+          <article class="panel" aria-labelledby="p-notif">
+            <div class="panel__header">
+              <h2 id="p-notif">Notificaciones</h2>
+            </div>
+            <ul class="notif">
+              <li class="notif__item notif__item--warn">
+                <span class="ico">⚠️</span>
+                <div>
+                  <div class="notif__title">Acción requerida, ¡Urgente!</div>
+                  <div class="notif__desc">Completa los documentos faltantes, tu solicitud vence HOY.</div>
+                </div>
+              </li>
+              <li class="notif__item">
+                <span class="ico">🔄</span>
+                <div>
+                  <div class="notif__title">Solicitud de cambio de carrera, ¡Enviada!</div>
+                  <div class="notif__desc">En evaluación, respuesta en 15 días aproximadamente.</div>
+                </div>
+              </li>
+              <li class="notif__item notif__item--info">
+                <span class="ico">⭐</span>
+                <div>
+                  <div class="notif__title">Solicitud de validación para tu sílabo, ¡Está en revisión!</div>
+                  <div class="notif__desc">Este proceso toma entre 1 - 3 días hábiles.</div>
+                </div>
+              </li>
+            </ul>
+          </article>
+
+          <article class="panel" aria-labelledby="p-gauge">
+            <div class="panel__header">
+              <h2 id="p-gauge">Tiempo estimado por trámite</h2>
+            </div>
+            <div class="gauge">
+              <div class="gauge__arc"></div>
+              <div class="gauge__min">0</div>
+              <div class="gauge__max">100</div>
+            </div>
+          </article>
+
+          <article class="panel" aria-labelledby="p-fechas">
+            <div class="panel__header">
+              <h2 id="p-fechas">Próximas fechas importantes</h2>
+            </div>
+            <ul class="dates">
+              <li>
+                <span class="badge">HOY<br/>04 SEP</span>
+                <div>
+                  <div class="dates__title">Certificado de notas</div>
+                  <div class="dates__desc">Último día para realizar solicitud, no lo olvides.</div>
+                </div>
+              </li>
+              <li>
+                <span class="badge">07<br/>SEP</span>
+                <div>
+                  <div class="dates__title">Solicitudes para beca</div>
+                  <div class="dates__desc">Recuerda que solo puedes hacerlo hasta esta fecha límite.</div>
+                </div>
+              </li>
+              <li>
+                <span class="badge">15<br/>SEP</span>
+                <div>
+                  <div class="dates__title">Anulación de matrícula</div>
+                  <div class="dates__desc">Recuerda que solo puedes hacerlo hasta esta fecha límite.</div>
+                </div>
+              </li>
+            </ul>
+          </article>
+
+          <article class="panel" aria-labelledby="p-cal">
+            <div class="panel__header">
+              <h2 id="p-cal">April 2025</h2>
+            </div>
+            <div class="calendar" aria-label="Calendario Abril 2025">
+              <div class="cal__week cal__head">
+                <span>SUN</span><span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span>
+              </div>
+              <div class="cal__week">
+                <span class="muted">30</span><span class="muted">31</span><span class="day">1</span><span class="day">2</span><span class="day">3</span><span class="day">4</span><span class="day">5</span>
+              </div>
+              <div class="cal__week">
+                <span class="day">6</span><span class="day">7</span><span class="day">8</span><span class="day">9</span><span class="day pill">10</span><span class="day">11</span><span class="day">12</span>
+              </div>
+              <div class="cal__week">
+                <span class="day">13</span><span class="day pill">14</span><span class="day">15</span><span class="day pill">16</span><span class="day">17</span><span class="day">18</span><span class="day">19</span>
+              </div>
+              <div class="cal__week">
+                <span class="day pill">20</span><span class="day">21</span><span class="day">22</span><span class="day">23</span><span class="day pill">24</span><span class="day">25</span><span class="day">26</span>
+              </div>
+            </div>
+          </article>
+          </section>
+        </section>
+
+        <!-- Vista: Solicitudes (Estudiante) -->
+        <section id="view-solicitudes" class="view" hidden>
+          <h2 class="view__title">Registro de solicitud</h2>
+
+          <div class="soli-toolbar">
+            <div class="spacer"></div>
+            <label class="field field--inline">
+              <span class="label">Tipo</span>
+              <select id="st-fil-tipo" class="select">
+                <option value="">Todos</option>
+                <option>Certificados académicos</option>
+                <option>Cambio de carrera</option>
+                <option>Homologación</option>
+                <option>Baja de matrícula</option>
+                <option>Otro</option>
+              </select>
+            </label>
+            <label class="field field--inline">
+              <span class="label">Prioridad</span>
+              <select id="st-fil-prio" class="select">
+                <option value="">Todas</option>
+                <option>Baja</option>
+                <option>Media</option>
+                <option>Alta</option>
+                <option>Urgente</option>
+              </select>
+            </label>
+            <label class="field field--inline">
+              <span class="label">Estado</span>
+              <select id="st-fil-estado" class="select">
+                <option value="">Todos</option>
+                <option>Disponible</option>
+                <option>Requiere revisión</option>
+              </select>
+            </label>
+            <label class="field field--inline">
+              <span class="label">Buscar</span>
+              <input id="st-buscar" class="select" placeholder="Título, tipo…" />
+            </label>
+            <button id="st-fil-clear" class="btn-ghost" type="button" title="Limpiar filtros">Limpiar</button>
+          </div>
+
+          <div id="st-sgrid" class="soli-grid"></div>
+        </section>
+
+        <!-- Modal Solicitud (Estudiante) -->
+        <div id="st-modal" class="modal" hidden>
+          <div class="modal__backdrop" data-close="1"></div>
+          <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="st-modal-title">
+            <div class="modal__header">
+              <h3 id="st-modal-title">Trámite</h3>
+              <button id="st-close" class="btn-ghost" type="button">✕</button>
+            </div>
+            <div class="modal__body">
+              <form id="st-form" class="form-grid form-modal" autocomplete="off">
+                <input type="hidden" id="st-id" />
+                <label class="field field--col-2">
+                  <span class="label">Trámite</span>
+                  <input id="st-tramite" class="select" readonly />
+                </label>
+                <div id="st-cert-wrap" class="field field--col-2" hidden>
+                  <div class="col">
+                    <label class="field">
+                      <span class="label">Tipo de certificado</span>
+                      <select id="st-cert-tipo" class="select">
+                        <option selected>Seleccione una opción</option>
+                        <option>Certificado de notas</option>
+                        <option>Récord académico</option>
+                        <option>Constancia de estudios</option>
+                      </select>
+                    </label>
+                  </div>
+                  <div class="col">
+                    <label class="field">
+                      <span class="label">Semestre a incluir</span>
+                      <select id="st-cert-sem" class="select">
+                        <option selected>Seleccione una opción</option>
+                        <option>2025-1</option>
+                        <option>2024-2</option>
+                        <option>2024-1</option>
+                      </select>
+                    </label>
+                  </div>
+                </div>
+                <label class="field field--col-2">
+                  <span class="label">Observaciones</span>
+                  <textarea id="st-obs" class="textarea" placeholder="Descripción"></textarea>
+                </label>
+                <div class="field field--col-2">
+                  <span class="label">Adjuntar documentos</span>
+                  <div id="st-dropzone" class="dropzone" tabindex="0" role="button" aria-label="Arrastra o selecciona archivos">
+                    <div class="dz-ico">📄</div>
+                    <div class="dz-text">Arrastra o selecciona los archivos aquí</div>
+                    <input id="st-file-input" type="file" multiple hidden />
+                  </div>
+                  <div id="st-dz-list" class="dz-list"></div>
+                </div>
+                <div class="form-actions field--col-2">
+                  <button id="st-cancel" type="button" class="btn-ghost">Cancelar</button>
+                  <button id="st-enviar" type="submit" class="btn-primary">Enviar solicitud</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vista: Seguimiento (Estudiante) -->
+        <section id="view-seguimiento" class="view" hidden>
+          <h2 class="view__title">Seguimiento de trámites</h2>
+
+          <article class="panel seg-search" aria-labelledby="seg-search-title">
+            <div class="panel__header">
+              <h3 id="seg-search-title">Buscar solicitud</h3>
+            </div>
+            <div class="seg-search__grid">
+              <label class="field">
+                <span class="label">Buscar por:</span>
+                <select class="select" id="seg-criterio">
+                  <option>Número de solicitud</option>
+                  <option>Tipo de trámite</option>
+                  <option>Estado</option>
+                </select>
+              </label>
+              <label class="field">
+                <span class="label">Observaciones</span>
+                <input class="select" id="seg-texto" placeholder="Descripción" />
+              </label>
+              <div class="field field--action">
+                <button id="seg-buscar" class="btn-primary" type="button">🔍 Buscar</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel seg-tl" aria-labelledby="seg-tl-title">
+            <div class="panel__header"><h3 id="seg-tl-title">Solicitud para la homologación de materias: <span id="seg-id">#1251238554</span></h3></div>
+            <ol class="timeline" id="timeline">
+              <li class="tl-item done">
+                <div class="tl-dot">✔</div>
+                <div class="tl-body">
+                  <div class="tl-title">Solicitud recibida</div>
+                  <div class="tl-meta">25 de mayo, 2025 · 10:00 AM</div>
+                  <div class="tl-desc">Su solicitud de homologación ha sido recibida y está pendiente su revisión por la secretaría académica.</div>
+                </div>
+              </li>
+              <li class="tl-item done">
+                <div class="tl-dot">✔</div>
+                <div class="tl-body">
+                  <div class="tl-title">Revisión de documentos</div>
+                  <div class="tl-meta">26 de mayo, 2025 · 2:30 PM</div>
+                  <div class="tl-desc">La documentación fue revisada y validada por secretaría.</div>
+                </div>
+              </li>
+              <li class="tl-item current">
+                <div class="tl-dot">⌛</div>
+                <div class="tl-body">
+                  <div class="tl-title">Enviado a coordinación de carrera</div>
+                  <div class="tl-meta">27 de mayo, 2025 · 11:25 AM</div>
+                  <div class="tl-desc">El documento se encuentra en análisis por parte de coordinación de carrera para emitir el dictamen académico.</div>
+                </div>
+              </li>
+              <li class="tl-item pending">
+                <div class="tl-dot">•</div>
+                <div class="tl-body">
+                  <div class="tl-title">Resolución final</div>
+                  <div class="tl-meta">Pendiente</div>
+                  <div class="tl-desc">La solicitud está a espera de la resolución por parte de coordinación.</div>
+                </div>
+              </li>
+            </ol>
+          </article>
+        </section>
+
+        <!-- Vista: Asistente IA (Estudiante) -->
+        <section id="view-asistente" class="view" hidden>
+          <h2 class="view__title">Asistente de inteligencia artificial</h2>
+          <div class="chat">
+            <div class="chat__window" id="chat-window" aria-live="polite">
+              <div class="msg msg--ia">
+                <div class="msg__avatar">IA</div>
+                <div class="msg__bubble">
+                  Hola soy tu asistente virtual basado en inteligencia artificial de la UTEQ. Estoy aquí para ayudarte con información sobre trámites estudiantiles, requisitos, tiempos y más. ¿En qué puedo ayudarte hoy?
+                  <div class="msg__meta">Hace segundos</div>
+                </div>
+              </div>
+              <div class="msg msg--ia">
+                <div class="msg__avatar">IA</div>
+                <div class="msg__bubble">
+                  Aquí hay algunas preguntas frecuentes: 
+                  <a href="#" class="sugg" data-q="¿Cómo solicito un certificado académico?">¿Cómo solicito un certificado académico?</a>, 
+                  <a href="#" class="sugg" data-q="¿Cuáles son los requisitos para una homologación?">¿Cuáles son los requisitos para una homologación?</a>, 
+                  <a href="#" class="sugg" data-q="¿Cuánto toma procesar un solicitud?">¿Cuánto toma procesar un solicitud?</a>
+                  <div class="msg__meta">Ahora</div>
+                </div>
+              </div>
+            </div>
+            <div class="chat__composer">
+              <textarea id="chat-input" class="chat__input" rows="1" placeholder="Escribe una pregunta… (Shift+Enter para salto de línea)"></textarea>
+              <button id="chat-send" class="chat__send" title="Enviar">＋</button>
+              <button id="chat-clear" class="chat__clear" title="Limpiar">🗑</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Vista: Notificaciones (Estudiante) -->
+        <section id="view-notificaciones" class="view" hidden>
+          <h2 class="view__title">Configuración y historial de notificaciones</h2>
+
+          <section class="stats">
+            <div class="stat"><div class="stat__icon">✈️</div><div class="stat__value">12</div><div class="stat__label">Mensajes sin leer</div></div>
+            <div class="stat"><div class="stat__icon">📅</div><div class="stat__value">5</div><div class="stat__label">Mensajes esta semana</div></div>
+            <div class="stat"><div class="stat__icon">✅</div><div class="stat__value">6</div><div class="stat__label">Mensajes importantes</div></div>
+            <div class="stat"><div class="stat__icon">📥</div><div class="stat__value">1</div><div class="stat__label">Mensajes recibidos</div></div>
+            <div class="stat"><div class="stat__icon">👍</div><div class="stat__value">95%</div><div class="stat__label">Tasa de entrega</div></div>
+          </section>
+
+          <article class="panel">
+            <div class="panel__header"><h3>Historial de notificaciones</h3></div>
+            <ul id="notif-list" class="notif-list">
+              <!-- Items de ejemplo -->
+              <li class="notif-card">
+                <div class="notif-card__icon">⚠️</div>
+                <div class="notif-card__body">
+                  <div class="notif-card__title">Acción requerida, ¡Urgente!</div>
+                  <div class="notif-card__desc">Completa los documentos faltantes, tu solicitud vence HOY.</div>
+                  <div class="notif-card__actions">
+                    <button class="pill pill--primary">Ver solicitud</button>
+                    <button class="pill pill--light js-read">Leído</button>
+                  </div>
+                </div>
+                <div class="notif-card__time">Hace 10 minutos</div>
+              </li>
+              <li class="notif-card">
+                <div class="notif-card__icon">⚠️</div>
+                <div class="notif-card__body">
+                  <div class="notif-card__title">Acción requerida, ¡Urgente!</div>
+                  <div class="notif-card__desc">Completa los documentos faltantes, tu solicitud vence HOY.</div>
+                  <div class="notif-card__actions">
+                    <button class="pill pill--primary">Ver solicitud</button>
+                    <button class="pill pill--light js-read">Leído</button>
+                  </div>
+                </div>
+                <div class="notif-card__time">Hace 10 minutos</div>
+              </li>
+              <li class="notif-card">
+                <div class="notif-card__icon">⚠️</div>
+                <div class="notif-card__body">
+                  <div class="notif-card__title">Acción requerida, ¡Urgente!</div>
+                  <div class="notif-card__desc">Completa los documentos faltantes, tu solicitud vence HOY.</div>
+                  <div class="notif-card__actions">
+                    <button class="pill pill--primary">Ver solicitud</button>
+                    <button class="pill pill--light js-read">Leído</button>
+                  </div>
+                </div>
+                <div class="notif-card__time">Hace 10 minutos</div>
+              </li>
+              <li class="notif-card">
+                <div class="notif-card__icon">⚠️</div>
+                <div class="notif-card__body">
+                  <div class="notif-card__title">Acción requerida, ¡Urgente!</div>
+                  <div class="notif-card__desc">Completa los documentos faltantes, tu solicitud vence HOY.</div>
+                  <div class="notif-card__actions">
+                    <button class="pill pill--primary">Ver solicitud</button>
+                    <button class="pill pill--light js-read">Leído</button>
+                  </div>
+                </div>
+                <div class="notif-card__time">Hace 10 minutos</div>
+              </li>
+            </ul>
+          </article>
+
+          <article class="panel notif-config" aria-labelledby="notif-config-title">
+            <div class="panel__header"><h3 id="notif-config-title">Preferencias de recepción</h3></div>
+            <div class="cfg-grid">
+              <label class="cfg-item">
+                <span class="cfg-icon">💬</span>
+                <span class="cfg-text"><strong>WhatsApp</strong><br/><small>Mensajes a tu número registrado</small></span>
+                <span class="cfg-spacer"></span>
+                <input type="checkbox" class="switch" id="cfg-wa" />
+              </label>
+              <label class="cfg-item">
+                <span class="cfg-icon">✉️</span>
+                <span class="cfg-text"><strong>Correo electrónico</strong><br/><small>Enviaremos un email a tu cuenta UTEQ</small></span>
+                <span class="cfg-spacer"></span>
+                <input type="checkbox" class="switch" id="cfg-mail" checked />
+              </label>
+              <label class="cfg-item">
+                <span class="cfg-icon">📱</span>
+                <span class="cfg-text"><strong>Notificación en la app</strong><br/><small>Alertas dentro del sistema</small></span>
+                <span class="cfg-spacer"></span>
+                <input type="checkbox" class="switch" id="cfg-app" checked />
+              </label>
+              <label class="cfg-item">
+                <span class="cfg-icon">📲</span>
+                <span class="cfg-text"><strong>SMS</strong><br/><small>Mensajes de texto a tu línea</small></span>
+                <span class="cfg-spacer"></span>
+                <input type="checkbox" class="switch" id="cfg-sms" />
+              </label>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn-ghost" id="cfg-reset">Restablecer</button>
+              <button type="button" class="btn-primary" id="cfg-save">Guardar preferencias</button>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <script src="modulo-estudiante.js"></script>
+  </body>
+  </html>

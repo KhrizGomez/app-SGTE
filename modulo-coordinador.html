@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Módulo — Coordinador</title>
+    <link rel="preload" as="image" href="recursos/logo.png" />
+    <link rel="stylesheet" href="modulo-coordinador.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="brand-bar">
+          <img src="recursos/logo.png" alt="UTEQ" />
+        </div>
+        <nav class="nav">
+          <p class="nav__section">Principal</p>
+          <a class="nav__item active" href="#" data-key="dashboard">Dashboard</a>
+          <a class="nav__item" href="#" data-key="solicitudes">Solicitudes</a>
+          <a class="nav__item" href="#" data-key="seguimiento">Seguimiento</a>
+          <p class="nav__section">Herramientas</p>
+          <a class="nav__item" href="#" data-key="notificaciones">Notificaciones</a>
+          <a class="nav__item" href="#" data-key="reportes">Reportes</a>
+        </nav>
+        <div class="user">
+          <div class="avatar">J</div>
+          <div class="user__info">
+            <div class="user__name">Jessica Ponce</div>
+            <div class="user__role">Coordinadora</div>
+          </div>
+          <button class="power" title="Cerrar sesión" aria-label="Cerrar sesión">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M15 4h4v16h-4"/>
+              <path d="M10 7l5 5-5 5"/>
+              <path d="M15 12H3"/>
+            </svg>
+          </button>
+        </div>
+      </aside>
+
+      <main class="content">
+        <header class="top">
+          <h1 id="page-title">Panel de control principal</h1>
+          <div class="spacer"></div>
+        </header>
+
+        <!-- Vista: Dashboard (Coordinador) -->
+        <section id="view-dashboard" class="view view--active">
+          <section class="stats">
+            <div class="stat">
+              <div class="stat__icon">🟢</div>
+              <div class="stat__value">21</div>
+              <div class="stat__label">Solicitudes urgentes</div>
+            </div>
+            <div class="stat">
+              <div class="stat__icon">👥</div>
+              <div class="stat__value">175</div>
+              <div class="stat__label">Estudiantes activos</div>
+            </div>
+            <div class="stat">
+              <div class="stat__icon">✅</div>
+              <div class="stat__value">596</div>
+              <div class="stat__label">Solicitudes completas</div>
+            </div>
+            <div class="stat">
+              <div class="stat__icon">✳️</div>
+              <div class="stat__value">45</div>
+              <div class="stat__label">Revisiones pendientes</div>
+            </div>
+            <div class="stat">
+              <div class="stat__icon">✖️</div>
+              <div class="stat__value">14</div>
+              <div class="stat__label">Solicitudes rechazadas</div>
+            </div>
+          </section>
+
+          <section class="grid-3">
+            <article class="panel span-2" aria-labelledby="p-env-mes">
+              <div class="panel__header">
+                <h2 id="p-env-mes">Solicitudes recibidas por mes</h2>
+              </div>
+              <div class="bars" id="bars"></div>
+              <div class="bars__labels" id="bars-labels"></div>
+            </article>
+
+            <article class="panel" aria-labelledby="p-notif">
+              <div class="panel__header">
+                <h2 id="p-notif">Notificaciones</h2>
+              </div>
+              <ul class="notif">
+                <li class="notif__item notif__item--warn">
+                  <span class="ico">⚠️</span>
+                  <div>
+                    <div class="notif__title">Acción requerida, ¡Urgente!</div>
+                    <div class="notif__desc">Completa los documentos faltantes, tu solicitud vence HOY.</div>
+                  </div>
+                </li>
+                <li class="notif__item">
+                  <span class="ico">🔄</span>
+                  <div>
+                    <div class="notif__title">Solicitud de cambio de carrera, ¡Enviada!</div>
+                    <div class="notif__desc">En evaluación, respuesta en 15 días aproximadamente.</div>
+                  </div>
+                </li>
+                <li class="notif__item notif__item--info">
+                  <span class="ico">⭐</span>
+                  <div>
+                    <div class="notif__title">Solicitud de validación para tu sílabo, ¡Está en revisión!</div>
+                    <div class="notif__desc">Este proceso toma entre 1 - 3 días hábiles.</div>
+                  </div>
+                </li>
+              </ul>
+            </article>
+
+            <article class="panel" aria-labelledby="p-qactions">
+              <div class="panel__header">
+                <h2 id="p-qactions">Acciones rápidas</h2>
+              </div>
+              <ul class="qa-list">
+                <li><button class="qa-item" type="button"><span class="qa-ico">➕</span><span class="qa-text"><strong>Nueva solicitud</strong><br/><small>Crea una nueva solicitud</small></span></button></li>
+                <li><button class="qa-item" type="button"><span class="qa-ico">🤖</span><span class="qa-text"><strong>Ayuda de la IA</strong><br/><small>Resuelve tus dudas</small></span></button></li>
+                <li><button class="qa-item" type="button"><span class="qa-ico">🔍</span><span class="qa-text"><strong>Buscar trámite</strong><br/><small>Consulta el estado</small></span></button></li>
+                <li><button class="qa-item" type="button"><span class="qa-ico">⚙️</span><span class="qa-text"><strong>Configuración</strong><br/><small>Personaliza tu experiencia</small></span></button></li>
+              </ul>
+            </article>
+
+            <article class="panel span-2" aria-labelledby="p-donut">
+              <div class="panel__header">
+                <h2 id="p-donut">Trámites más solicitados este mes</h2>
+              </div>
+              <div class="donut-wrap">
+                <div id="donut" class="donut" aria-label="Participación por tipo de trámite"></div>
+                <div class="donut-center">
+                  <div class="donut-num" id="donut-total">138</div>
+                  <div class="donut-sub">Total</div>
+                </div>
+              </div>
+              <ul class="legend" id="donut-legend">
+                <li><span class="dot dot--cert"></span> Certificados</li>
+                <li><span class="dot dot--cambio"></span> Cambio de carrera</li>
+                <li><span class="dot dot--homol"></span> Homologación</li>
+                <li><span class="dot dot--baja"></span> Baja de matrícula</li>
+              </ul>
+            </article>
+
+            <article class="panel" aria-labelledby="p-fechas">
+              <div class="panel__header">
+                <h2 id="p-fechas">Próximas fechas importantes</h2>
+              </div>
+              <ul class="dates">
+                <li>
+                  <span class="badge">HOY<br/>04 SEP</span>
+                  <div>
+                    <div class="dates__title">Certificado de notas</div>
+                    <div class="dates__desc">Último día para realizar solicitud, no lo olvides.</div>
+                  </div>
+                </li>
+                <li>
+                  <span class="badge">07<br/>SEP</span>
+                  <div>
+                    <div class="dates__title">Solicitudes para beca</div>
+                    <div class="dates__desc">Recuerda que solo puedes hacerlo hasta esta fecha límite.</div>
+                  </div>
+                </li>
+                <li>
+                  <span class="badge">15<br/>SEP</span>
+                  <div>
+                    <div class="dates__title">Anulación de matrícula</div>
+                    <div class="dates__desc">Recuerda que solo puedes hacerlo hasta esta fecha límite.</div>
+                  </div>
+                </li>
+              </ul>
+            </article>
+
+            <article class="panel" aria-labelledby="p-cal">
+              <div class="panel__header">
+                <h2 id="p-cal">April 2025</h2>
+              </div>
+              <div class="calendar" aria-label="Calendario Abril 2025">
+                <div class="cal__week cal__head">
+                  <span>SUN</span><span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span>
+                </div>
+                <div class="cal__week">
+                  <span class="muted">30</span><span class="muted">31</span><span class="day">1</span><span class="day">2</span><span class="day">3</span><span class="day">4</span><span class="day">5</span>
+                </div>
+                <div class="cal__week">
+                  <span class="day">6</span><span class="day">7</span><span class="day">8</span><span class="day">9</span><span class="day pill">10</span><span class="day">11</span><span class="day">12</span>
+                </div>
+                <div class="cal__week">
+                  <span class="day">13</span><span class="day pill">14</span><span class="day">15</span><span class="day pill">16</span><span class="day">17</span><span class="day">18</span><span class="day">19</span>
+                </div>
+                <div class="cal__week">
+                  <span class="day pill">20</span><span class="day">21</span><span class="day">22</span><span class="day">23</span><span class="day pill">24</span><span class="day">25</span><span class="day">26</span>
+                </div>
+              </div>
+            </article>
+          </section>
+        </section>
+
+        <!-- Vista: Solicitudes (Coordinador) -->
+        <section id="view-solicitudes" class="view" hidden>
+          <h2 class="view__title">Gestión de solicitudes</h2>
+
+          <div class="soli-toolbar">
+            <button id="co-nuevo" class="btn-primary" type="button">＋ Nuevo trámite</button>
+            <div class="spacer"></div>
+            <label class="field field--inline">
+              <span class="label">Tipo</span>
+              <select id="co-fil-tipo" class="select">
+                <option value="">Todos</option>
+                <option>Certificados académicos</option>
+                <option>Cambio de carrera</option>
+                <option>Homologación</option>
+                <option>Baja de matrícula</option>
+                <option>Otro</option>
+              </select>
+            </label>
+            <label class="field field--inline">
+              <span class="label">Prioridad</span>
+              <select id="co-fil-prio" class="select">
+                <option value="">Todas</option>
+                <option>Baja</option>
+                <option>Media</option>
+                <option>Alta</option>
+                <option>Urgente</option>
+              </select>
+            </label>
+            <label class="field field--inline">
+              <span class="label">Estado</span>
+              <select id="co-fil-estado" class="select">
+                <option value="">Todos</option>
+                <option>Borrador</option>
+                <option>Publicado</option>
+                <option>En revisión</option>
+                <option>Finalizado</option>
+              </select>
+            </label>
+            <label class="field field--inline">
+              <span class="label">Buscar</span>
+              <input id="co-buscar" class="select" placeholder="Título, tipo, estado…" />
+            </label>
+            <button id="co-fil-clear" class="btn-ghost" type="button" title="Limpiar filtros">Limpiar</button>
+          </div>
+
+          <article class="panel" aria-labelledby="co-cards-title">
+            <div class="panel__header">
+              <h3 id="co-cards-title">Trámites</h3>
+            </div>
+            <div id="co-sgrid" class="soli-grid"></div>
+          </article>
+        </section>
+
+        <!-- Modal crear/editar trámite -->
+        <div id="co-modal" class="modal" hidden>
+          <div class="modal__backdrop" data-close="1"></div>
+          <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="co-modal-title">
+            <div class="modal__header">
+              <h3 id="co-modal-title">Trámite</h3>
+              <button id="co-close" class="btn-ghost" type="button">✕</button>
+            </div>
+            <div class="modal__body">
+              <form id="co-form" class="form-grid" autocomplete="off">
+                <input type="hidden" id="co-id" />
+                <label class="field field--col-2">
+                  <span class="label">Título del trámite</span>
+                  <input id="co-titulo" class="select" placeholder="Ej. Homologación de materias" required />
+                </label>
+                <label class="field">
+                  <span class="label">Tipo de trámite</span>
+                  <select id="co-tipo" class="select" required>
+                    <option value="">Seleccione una opción</option>
+                    <option>Certificados académicos</option>
+                    <option>Cambio de carrera</option>
+                    <option>Homologación</option>
+                    <option>Baja de matrícula</option>
+                    <option>Otro</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span class="label">Prioridad</span>
+                  <select id="co-prioridad" class="select">
+                    <option>Baja</option>
+                    <option>Media</option>
+                    <option>Alta</option>
+                    <option>Urgente</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span class="label">Estado</span>
+                  <select id="co-estado" class="select">
+                    <option>Borrador</option>
+                    <option>Publicado</option>
+                    <option>En revisión</option>
+                    <option>Finalizado</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span class="label">Responsable</span>
+                  <input id="co-responsable" class="select" placeholder="Nombre del responsable" />
+                </label>
+                <label class="field">
+                  <span class="label">Fecha límite</span>
+                  <input id="co-fecha" class="select" type="date" />
+                </label>
+                <label class="field field--col-2">
+                  <span class="label">Descripción</span>
+                  <textarea id="co-desc" class="textarea" placeholder="Detalles y requisitos"></textarea>
+                </label>
+
+                <div class="field field--col-2">
+                  <span class="label">Trazabilidad (flujo)</span>
+                  <div class="traza-grid">
+                    <select id="co-traza" class="select">
+                      <option value="basico">Recepción → Revisión → Aprobación → Notificación → Finalizado</option>
+                      <option value="validacion">Recepción → Validación documental → Revisión coordinación → Aprobación decanato → Finalizado</option>
+                      <option value="homologacion">Recepción → Evaluación de homologación → Resolución → Notificación → Finalizado</option>
+                      <option value="personalizada">Personalizada…</option>
+                    </select>
+                    <div id="co-traza-preview">
+                      <ol class="timeline timeline--v" id="co-tl" aria-label="Vista previa de la trazabilidad"></ol>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="co-custom" class="custom-flow" hidden>
+                  <div class="custom-flow__row">
+                    <input id="co-step-name" class="select" placeholder="Nombre de la etapa (Ej. Revisión de documentos)" />
+                    <select id="co-step-role" class="select" aria-label="Rol responsable de la etapa">
+                      <option value="Coordinador">Coordinador</option>
+                      <option value="Decano">Decano</option>
+                      <option value="Estudiante">Estudiante</option>
+                      <option value="Secretaría">Secretaría</option>
+                      <option value="Docente">Docente</option>
+                    </select>
+                    <button id="co-step-add" class="btn-primary" type="button">Añadir etapa</button>
+                  </div>
+                  <ul id="co-steps" class="steps-list" aria-label="Lista de etapas personalizadas"></ul>
+                </div>
+
+                <div class="form-actions field--col-2">
+                  <button id="co-cancelar" type="button" class="btn-ghost">Cancelar</button>
+                  <button id="co-guardar" type="submit" class="btn-primary">Guardar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vista: Seguimiento (Coordinador) -->
+        <section id="view-seguimiento" class="view" hidden>
+          <h2 class="view__title">Seguimiento de trámites</h2>
+          <div class="seg-grid">
+            <article class="panel seg-left" aria-labelledby="seg-list-title">
+              <div class="panel__header">
+                <h3 id="seg-list-title">Trámites vigentes</h3>
+                <label class="field field--inline">
+                  <span class="label">Buscar</span>
+                  <input id="seg-q" class="select" placeholder="#ID, estudiante, título…" />
+                </label>
+              </div>
+              <ul id="seg-list" class="seg-list" aria-label="Lista de trámites"></ul>
+            </article>
+
+            <article class="panel seg-right" aria-labelledby="seg-det-title">
+              <div class="panel__header">
+                <h3 id="seg-det-title">Detalle del trámite</h3>
+                <span id="seg-det-id" class="seg-id"></span>
+              </div>
+
+              <div id="seg-empty" class="seg-empty">Selecciona un trámite de la lista para ver detalles.</div>
+
+              <div id="seg-detail" class="seg-detail" hidden>
+                <div class="seg-summary">
+                  <div>
+                    <div class="seg-title" id="seg-title">—</div>
+                    <div class="seg-meta"><span id="seg-est">—</span> · <span id="seg-tipo">—</span> · <span id="seg-prio">—</span> · <span id="seg-estado">—</span></div>
+                  </div>
+                  <div class="seg-dates">
+                    <div><small>Creado</small><div id="seg-creado">—</div></div>
+                    <div><small>Actualizado</small><div id="seg-actual">—</div></div>
+                  </div>
+                </div>
+
+                <div class="seg-section">
+                  <h4 class="seg-h4">Archivos adjuntos</h4>
+                  <ul id="seg-files" class="files"></ul>
+                </div>
+
+                <div class="seg-section">
+                  <h4 class="seg-h4">Trazabilidad</h4>
+                  <ol id="seg-tl" class="timeline timeline--v"></ol>
+                </div>
+
+                <div id="seg-reject" class="seg-reject" hidden></div>
+
+                <div class="seg-actions">
+                  <button id="seg-next" class="btn-primary" type="button">Pasar a la siguiente etapa</button>
+                  <button id="seg-resol" class="btn-ghost" type="button" hidden>Generar resolución</button>
+                  <button id="seg-rechazar" class="btn-danger" type="button">Rechazar solicitud</button>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- Modal: Vista previa de archivo -->
+        <div id="file-modal" class="modal" hidden>
+          <div class="modal__backdrop" data-close="1"></div>
+          <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="file-modal-title">
+            <div class="modal__header">
+              <h3 id="file-modal-title">Vista previa</h3>
+              <button id="file-close" class="btn-ghost" type="button">✕</button>
+            </div>
+            <div class="modal__body">
+              <div id="file-meta" style="margin-bottom:8px;color:#6b7280;font-size:12px"></div>
+              <div id="file-preview" style="height:360px;display:grid;place-items:center;background:#f8fafb;border:1px solid #e5e7eb;border-radius:10px;color:#6b7280">
+                No hay vista previa disponible para este archivo.
+              </div>
+              <div class="form-actions" style="margin-top:10px">
+                <button id="file-dl" class="btn-primary" type="button">Descargar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal: Motivo de rechazo -->
+        <div id="rej-modal" class="modal" hidden>
+          <div class="modal__backdrop" data-close="1"></div>
+          <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="rej-modal-title">
+            <div class="modal__header">
+              <h3 id="rej-modal-title">Rechazar solicitud</h3>
+              <button id="rej-close" class="btn-ghost" type="button">✕</button>
+            </div>
+            <div class="modal__body">
+              <label class="field field--col-2">
+                <span class="label">Motivo del rechazo</span>
+                <textarea id="rej-reason" class="textarea" placeholder="Explica brevemente el motivo…" required></textarea>
+              </label>
+              <div class="form-actions">
+                <button id="rej-cancel" type="button" class="btn-ghost">Cancelar</button>
+                <button id="rej-confirm" type="button" class="btn-danger">Rechazar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vista: Notificaciones (Coordinador) -->
+        <section id="view-notificaciones" class="view" hidden>
+          <h2 class="view__title">Notificaciones y preferencias</h2>
+
+          <section class="stats">
+            <div class="stat"><div class="stat__icon">✈️</div><div class="stat__value" id="co-stat-unread">0</div><div class="stat__label">Mensajes sin leer</div></div>
+            <div class="stat"><div class="stat__icon">📅</div><div class="stat__value" id="co-stat-week">0</div><div class="stat__label">Mensajes esta semana</div></div>
+            <div class="stat"><div class="stat__icon">✅</div><div class="stat__value" id="co-stat-important">0</div><div class="stat__label">Importantes</div></div>
+            <div class="stat"><div class="stat__icon">📥</div><div class="stat__value" id="co-stat-total">0</div><div class="stat__label">Entregadas</div></div>
+            <div class="stat"><div class="stat__icon">🕒</div><div class="stat__value" id="co-stat-sched">24/7</div><div class="stat__label">Horario</div></div>
+          </section>
+
+          <article class="panel">
+            <div class="panel__header"><h3>Historial de notificaciones</h3></div>
+            <ul id="co-notif-list" class="notif-list"></ul>
+          </article>
+
+          <article class="panel notif-config" aria-labelledby="co-notif-config-title">
+            <div class="panel__header"><h3 id="co-notif-config-title">Preferencias de recepción</h3></div>
+            <div class="cfg-grid">
+              <label class="cfg-item">
+                <span class="cfg-icon">💬</span>
+                <span class="cfg-text"><strong>WhatsApp</strong><br/><small>Mensajes a tu número registrado</small></span>
+                <span class="cfg-spacer"></span>
+                <input type="checkbox" class="switch" id="co-cfg-wa" />
+              </label>
+              <label class="cfg-item">
+                <span class="cfg-icon">✉️</span>
+                <span class="cfg-text"><strong>Correo electrónico</strong><br/><small>Enviaremos un email a tu cuenta UTEQ</small></span>
+                <span class="cfg-spacer"></span>
+                <input type="checkbox" class="switch" id="co-cfg-mail" checked />
+              </label>
+              <label class="cfg-item">
+                <span class="cfg-icon">📱</span>
+                <span class="cfg-text"><strong>Notificación en la app</strong><br/><small>Alertas dentro del sistema</small></span>
+                <span class="cfg-spacer"></span>
+                <input type="checkbox" class="switch" id="co-cfg-app" checked />
+              </label>
+              <label class="cfg-item">
+                <span class="cfg-icon">📲</span>
+                <span class="cfg-text"><strong>SMS</strong><br/><small>Mensajes de texto a tu línea</small></span>
+                <span class="cfg-spacer"></span>
+                <input type="checkbox" class="switch" id="co-cfg-sms" />
+              </label>
+            </div>
+
+            <div class="cfg-grid" style="margin-top:12px">
+              <label class="cfg-item">
+                <span class="cfg-icon">🟢</span>
+                <span class="cfg-text"><strong>Disponible</strong><br/><small>Recibir notificaciones ahora</small></span>
+                <span class="cfg-spacer"></span>
+                <input type="checkbox" class="switch" id="co-cfg-available" checked />
+              </label>
+              <div class="cfg-item">
+                <span class="cfg-icon">⏰</span>
+                <div class="cfg-text"><strong>Horario de recepción</strong><br/><small>Solo enviar entre estas horas</small></div>
+                <div class="cfg-spacer"></div>
+                <div style="display:flex;gap:8px;align-items:center">
+                  <input id="co-cfg-start" type="time" class="select" value="08:00" />
+                  <span>—</span>
+                  <input id="co-cfg-end" type="time" class="select" value="18:00" />
+                </div>
+              </div>
+            </div>
+
+            <div class="cfg-grid" style="margin-top:12px">
+              <div class="cfg-item">
+                <span class="cfg-icon">📆</span>
+                <div class="cfg-text"><strong>Días permitidos</strong><br/><small>Selecciona cuándo quieres recibir</small></div>
+                <div class="cfg-spacer"></div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap">
+                  <label><input type="checkbox" id="co-day-mon" checked /> Lun</label>
+                  <label><input type="checkbox" id="co-day-tue" checked /> Mar</label>
+                  <label><input type="checkbox" id="co-day-wed" checked /> Mié</label>
+                  <label><input type="checkbox" id="co-day-thu" checked /> Jue</label>
+                  <label><input type="checkbox" id="co-day-fri" checked /> Vie</label>
+                  <label><input type="checkbox" id="co-day-sat" /> Sáb</label>
+                  <label><input type="checkbox" id="co-day-sun" /> Dom</label>
+                </div>
+              </div>
+              <div class="cfg-item">
+                <span class="cfg-icon">🔕</span>
+                <div class="cfg-text"><strong>No molestar</strong><br/><small>Silenciar en este horario</small></div>
+                <div class="cfg-spacer"></div>
+                <div style="display:flex;gap:8px;align-items:center">
+                  <input id="co-dnd-start" type="time" class="select" value="22:00" />
+                  <span>—</span>
+                  <input id="co-dnd-end" type="time" class="select" value="07:00" />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn-ghost" id="co-cfg-reset">Restablecer</button>
+              <button type="button" class="btn-primary" id="co-cfg-save">Guardar preferencias</button>
+            </div>
+          </article>
+        </section>
+
+        <!-- Vista: Reportes (Coordinador) -->
+        <section id="view-reportes" class="view" hidden>
+          <h2 class="view__title">Reportes y análisis</h2>
+
+          <div class="rep-toolbar">
+            <label class="field field--inline"><span class="label">Desde</span><input id="rep-desde" class="select" type="date" /></label>
+            <label class="field field--inline"><span class="label">Hasta</span><input id="rep-hasta" class="select" type="date" /></label>
+            <label class="field field--inline"><span class="label">Tipo</span>
+              <select id="rep-tipo" class="select">
+                <option value="">Todos</option>
+                <option>Certificados académicos</option>
+                <option>Cambio de carrera</option>
+                <option>Homologación</option>
+                <option>Baja de matrícula</option>
+                <option>Otro</option>
+              </select>
+            </label>
+            <label class="field field--inline"><span class="label">Prioridad</span>
+              <select id="rep-prio" class="select">
+                <option value="">Todas</option>
+                <option>Baja</option>
+                <option>Media</option>
+                <option>Alta</option>
+                <option>Urgente</option>
+              </select>
+            </label>
+            <label class="field field--inline"><span class="label">Estado</span>
+              <select id="rep-estado" class="select">
+                <option value="">Todos</option>
+                <option>Finalizado</option>
+                <option>En proceso</option>
+                <option>Rechazado</option>
+              </select>
+            </label>
+            <label class="field field--inline"><span class="label">Buscar</span><input id="rep-q" class="select" placeholder="ID, título…" /></label>
+            <div class="spacer"></div>
+            <button id="rep-export" class="btn-ghost" type="button">Exportar CSV</button>
+            <button id="rep-print" class="btn-primary" type="button">Imprimir</button>
+            <button id="rep-clear" class="btn-ghost" type="button">Limpiar</button>
+          </div>
+
+          <section class="grid-3">
+            <article class="panel span-2" aria-labelledby="rep-kpi-title">
+              <div class="panel__header"><h3 id="rep-kpi-title">Indicadores clave (KPI)</h3></div>
+              <div class="stats" id="rep-kpis">
+                <div class="stat"><div class="stat__icon">⏱</div><div class="stat__value" id="kpi-prom">0 d</div><div class="stat__label">Promedio por trámite</div></div>
+                <div class="stat"><div class="stat__icon">📦</div><div class="stat__value" id="kpi-total">0</div><div class="stat__label">Total en periodo</div></div>
+                <div class="stat"><div class="stat__icon">✅</div><div class="stat__value" id="kpi-res">0%</div><div class="stat__label">Tasa de resolución</div></div>
+                <div class="stat"><div class="stat__icon">🚫</div><div class="stat__value" id="kpi-rech">0%</div><div class="stat__label">Rechazos</div></div>
+                <div class="stat"><div class="stat__icon">🎯</div><div class="stat__value" id="kpi-sla">0%</div><div class="stat__label">SLA cumplido</div></div>
+              </div>
+            </article>
+
+            <article class="panel" aria-labelledby="rep-tipos-title">
+              <div class="panel__header"><h3 id="rep-tipos-title">Trámites por tipo</h3></div>
+              <div class="bars" id="rep-bars"></div>
+              <div class="bars__labels" id="rep-bars-labels"></div>
+            </article>
+
+            <article class="panel" aria-labelledby="rep-estados-title">
+              <div class="panel__header"><h3 id="rep-estados-title">Distribución por estado</h3></div>
+              <div class="donut-wrap">
+                <div id="rep-donut" class="donut" aria-label="Distribución por estado"></div>
+                <div class="donut-center">
+                  <div class="donut-num" id="rep-donut-total">0</div>
+                  <div class="donut-sub">Total</div>
+                </div>
+              </div>
+              <ul class="legend">
+                <li><span class="dot" style="background:#10b981"></span> Finalizado</li>
+                <li><span class="dot" style="background:#f59e0b"></span> En proceso</li>
+                <li><span class="dot" style="background:#ef4444"></span> Rechazado</li>
+              </ul>
+            </article>
+          </section>
+
+          <article class="panel span-2" aria-labelledby="rep-hist-title">
+            <div class="panel__header"><h3 id="rep-hist-title">Historial de trámites</h3></div>
+            <div class="rep-table-wrap">
+              <table class="rep-table" id="rep-table" aria-label="Tabla de historial">
+                <thead>
+                  <tr>
+                    <th>ID</th><th>Título</th><th>Tipo</th><th>Prioridad</th><th>Estado</th><th>Creado</th><th>Resuelto</th><th>Días</th><th>SLA</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <script src="modulo-coordinador.js"></script>
+  </body>
+</html>

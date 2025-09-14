@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Inicio de sesión — SGTE</title>
+    <link rel="preload" as="image" href="recursos/fondo.png" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <div class="bg" role="img" aria-label="Fondo del campus"></div>
+
+      <section class="card" aria-labelledby="app-title">
+        <header class="brand">
+          <img src="recursos/logo.png" alt="UTEQ" class="brand__logo" />
+        </header>
+
+        <form class="form" autocomplete="on">
+          <label class="input">
+            <span class="sr-only">Usuario</span>
+            <input type="text" name="usuario" placeholder="Usuario" required />
+          </label>
+
+          <label class="input">
+            <span class="sr-only">Contraseña</span>
+            <input type="password" name="password" placeholder="Contraseña" required />
+          </label>
+
+          <button type="submit" class="btn btn--primary">Iniciar Sesión</button>
+          <button type="button" class="btn btn--dark" id="crear-cuenta">Crear Cuenta</button>
+
+          <a class="link-forgot" href="#" id="ext-open">¿Eres estudiante externo? Solicita credenciales</a>
+
+          <a class="link-forgot" href="#" id="forgot">¿Olvidaste tu contraseña?</a>
+
+          <div class="roles" role="group" aria-label="Seleccionar rol">
+            <button type="button" class="chip" data-rol="estudiante">Estudiante</button>
+            <button type="button" class="chip" data-rol="coordinador">Coordinador</button>
+            <button type="button" class="chip" data-rol="decano">Decano</button>
+            <button type="button" class="chip" data-rol="administrador">Administrador</button>
+          </div>
+
+          <!-- Opciones por rol: se renderizan dinámicamente; empezamos con Estudiante -->
+          <div id="role-options" class="role-options" hidden>
+            <!-- JS inyectará tarjetas aquí según el rol seleccionado -->
+          </div>
+        </form>
+      </section>
+    </main>
+
+  <!-- Modal: Solicitud de credenciales para estudiantes externos -->
+    <div id="ext-modal" class="modal" hidden>
+      <div class="modal__backdrop" data-close="1"></div>
+      <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="ext-title">
+        <div class="modal__header">
+          <h3 id="ext-title">Solicitud de credenciales — Estudiante externo</h3>
+          <button id="ext-close" class="btn btn--dark" type="button" style="height:auto;padding:6px 10px">✕</button>
+        </div>
+        <div class="modal__body">
+          <form id="ext-form" class="form-grid" autocomplete="off">
+            <label class="field">
+              <span class="label">Nombres y apellidos</span>
+              <input id="ext-nombre" class="input__ctrl" placeholder="Tu nombre completo" required />
+            </label>
+            <label class="field">
+              <span class="label">Correo electrónico</span>
+              <input id="ext-email" class="input__ctrl" type="email" placeholder="nombre@dominio.com" required />
+            </label>
+            <label class="field">
+              <span class="label">Teléfono</span>
+              <input id="ext-telefono" class="input__ctrl" type="tel" placeholder="Ej. +593 9 9999 9999" required />
+            </label>
+            <div class="field field--row">
+              <label class="field">
+                <span class="label">Tipo de identificación</span>
+                <select id="ext-id-tipo" class="input__ctrl">
+                  <option value="Cedula">Cédula</option>
+                  <option value="Pasaporte">Pasaporte</option>
+                </select>
+              </label>
+              <label class="field">
+                <span class="label">Número</span>
+                <input id="ext-id-num" class="input__ctrl" placeholder="Número de documento" required />
+              </label>
+            </div>
+            <label class="field">
+              <span class="label">Universidad de origen</span>
+              <input id="ext-universidad" class="input__ctrl" placeholder="Nombre de la Universidad" required />
+            </label>
+            <label class="field">
+              <span class="label">Programa/Carrera</span>
+              <input id="ext-programa" class="input__ctrl" placeholder="Ej. Ingeniería en Sistemas" required />
+            </label>
+            <label class="field field--col-2">
+              <span class="label">Motivo</span>
+              <textarea id="ext-motivo" class="textarea__ctrl" placeholder="Explica brevemente por qué solicitas credenciales" required></textarea>
+            </label>
+
+            <div class="field field--col-2">
+              <span class="label">Documentos de respaldo</span>
+              <div id="ext-drop" class="dropzone" aria-label="Zona para arrastrar y soltar archivos">
+                <div class="dz-hint">Arrastra y suelta aquí tus archivos o <label for="ext-files" class="dz-browse">explora</label></div>
+                <input id="ext-files" type="file" multiple hidden />
+              </div>
+              <ul id="ext-filelist" class="dz-files"></ul>
+            </div>
+
+            <label class="field field--col-2" style="align-items:flex-start">
+              <input id="ext-consent" type="checkbox" required />
+              <span>Acepto el tratamiento de mis datos personales para la evaluación de esta solicitud.</span>
+            </label>
+
+            <div class="form-actions field--col-2">
+              <button type="button" id="ext-cancel" class="btn btn--dark">Cancelar</button>
+              <button type="submit" id="ext-submit" class="btn btn--primary">Enviar solicitud</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Recuperar contraseña -->
+    <div id="fp-modal" class="modal" hidden>
+      <div class="modal__backdrop" data-close="1"></div>
+      <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="fp-title">
+        <div class="modal__header">
+          <h3 id="fp-title">Recuperar contraseña</h3>
+          <button id="fp-close" class="btn btn--dark" type="button" style="height:auto;padding:6px 10px">✕</button>
+        </div>
+        <div class="modal__body">
+          <form id="fp-form" class="form-grid" autocomplete="off">
+            <label class="field field--col-2">
+              <span class="label">Correo institucional</span>
+              <input id="fp-email" class="input__ctrl" type="email" placeholder="tucorreo@uteq.edu.ec" required />
+            </label>
+            <div class="form-actions field--col-2">
+              <button type="button" id="fp-cancel" class="btn btn--dark">Cancelar</button>
+              <button type="submit" id="fp-submit" class="btn btn--primary">Enviar enlace</button>
+            </div>
+          </form>
+          <p style="font-size:12px;color:#5a6872;margin-top:8px">Te enviaremos un enlace temporal para restablecer tu contraseña. Revisa tu bandeja de entrada y spam.</p>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+  </html>
