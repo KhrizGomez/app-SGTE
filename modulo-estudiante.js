@@ -280,11 +280,64 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Notificaciones: marcar como leído
-  document.querySelectorAll('.js-read').forEach(btn => btn.addEventListener('click', () => {
-    const li = btn.closest('.notif-card');
-    if(li){ li.style.opacity = .55; btn.disabled = true; btn.textContent = 'Leído'; }
-  }));
+  // Notificaciones: detalle + leído + deep-link
+  const notifList = document.getElementById('notif-list');
+  const stNotifModal = document.getElementById('st-notif-modal');
+  const stNotifClose = document.getElementById('st-notif-close');
+  const stNotifIco = document.getElementById('st-notif-ico');
+  const stNotifHead = document.getElementById('st-notif-head');
+  const stNotifDesc = document.getElementById('st-notif-desc');
+  const stNotifTime = document.getElementById('st-notif-time');
+  const stNotifGoto = document.getElementById('st-notif-goto');
+  const stNotifMark = document.getElementById('st-notif-mark');
+  let stNotifCtx = { li:null, caseId:null };
+
+  function stOpenNotifModal(fromLi){
+    stNotifCtx.li = fromLi;
+    const icon = fromLi.querySelector('.notif-card__icon')?.textContent?.trim() || '🔔';
+    const title = fromLi.querySelector('.notif-card__title')?.textContent?.trim() || 'Notificación';
+    const desc = fromLi.querySelector('.notif-card__desc')?.textContent?.trim() || '';
+    const time = fromLi.querySelector('.notif-card__time')?.textContent?.trim() || '';
+    stNotifCtx.caseId = (desc.match(/(C-\d{4})/)||[])[1] || null;
+    if(stNotifIco) stNotifIco.textContent = icon;
+    if(stNotifHead) stNotifHead.textContent = title;
+    if(stNotifDesc) stNotifDesc.textContent = desc;
+    if(stNotifTime) stNotifTime.textContent = time;
+    if(stNotifModal) stNotifModal.hidden = false;
+  }
+  function stCloseNotifModal(){ if(stNotifModal) stNotifModal.hidden = true; }
+  stNotifClose?.addEventListener('click', stCloseNotifModal);
+  stNotifModal?.addEventListener('click', (e)=>{ if(e.target?.dataset?.close) stCloseNotifModal(); });
+
+  // Delegate clicks in notif list
+  if(notifList){
+    notifList.addEventListener('click', (e)=>{
+      const t = e.target;
+      if(!(t instanceof HTMLElement)) return;
+      const li = t.closest('.notif-card');
+      if(!li) return;
+      if(t.classList.contains('js-read')){
+        li.style.opacity = .55; t.setAttribute('disabled',''); t.textContent = 'Leído';
+        return;
+      }
+      // If clicked primary button or body, open details
+      if(t.classList.contains('pill--primary') || t.classList.contains('notif-card__body') || t.closest('.notif-card__body')){
+        stOpenNotifModal(li);
+      }
+    });
+  }
+
+  stNotifMark?.addEventListener('click', ()=>{
+    const btn = stNotifCtx.li?.querySelector('.js-read');
+    if(btn){ btn.click(); }
+    stCloseNotifModal();
+  });
+  stNotifGoto?.addEventListener('click', ()=>{
+    // Cambiar a Seguimiento
+    const navItem = Array.from(document.querySelectorAll('.nav__item')).find(a=>a.getAttribute('data-key')==='seguimiento');
+    if(navItem){ navItem.click(); }
+    stCloseNotifModal();
+  });
 
   // Preferencias de canales (localStorage demo)
   const storageKey = 'sgte_notif_prefs';

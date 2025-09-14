@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Módulo — Decano</title>
     <link rel="preload" as="image" href="recursos/logo.png" />
-    <link rel="stylesheet" href="modulo-coordinador.css" />
+  <link rel="stylesheet" href="modulo-decano.css" />
   </head>
   <body>
     <div class="layout">
@@ -21,11 +21,12 @@
           <p class="nav__section">Herramientas</p>
           <a class="nav__item" href="#" data-key="notificaciones">Notificaciones</a>
           <a class="nav__item" href="#" data-key="reportes">Reportes</a>
+          <a class="nav__item" href="#" data-key="administracion">Administración</a>
         </nav>
         <div class="user">
           <div class="avatar">D</div>
           <div class="user__info">
-            <div class="user__name">Dr. Decano</div>
+            <div class="user__name">Washington Chiriboga</div>
             <div class="user__role">Decano</div>
           </div>
           <button class="power" title="Cerrar sesión" aria-label="Cerrar sesión">
@@ -40,12 +41,16 @@
 
       <main class="content">
         <header class="top">
-          <h1 id="page-title">Panel de control — Decano</h1>
+          <h1 id="page-title">Dashboard</h1>
           <div class="spacer"></div>
         </header>
 
         <!-- Reuse all views from Coordinador so Decano has identical modules -->
         <!-- We import the same CSS and JS; the HTML structure below is identical to modulo-coordinador.html -->
+        <!-- Global system banner (e.g., maintenance mode) -->
+        <div id="sys-banner" class="sys-banner" hidden>
+          <span id="sys-banner-text">Mantenimiento programado en curso. El sistema podría estar lento.</span>
+        </div>
 
         <!-- Vista: Dashboard -->
         <section id="view-dashboard" class="view view--active">
@@ -175,7 +180,7 @@
         <!-- We reuse the markup to ensure the same functionality and IDs are present -->
         <!-- Vista: Solicitudes -->
         <section id="view-solicitudes" class="view" hidden>
-          <h2 class="view__title">Gestión de solicitudes</h2>
+          <!-- <h2 class="view__title">Gestión de solicitudes</h2> -->
 
           <div class="soli-toolbar">
             <button id="co-nuevo" class="btn-primary" type="button">＋ Nuevo trámite</button>
@@ -324,7 +329,7 @@
 
         <!-- Vista: Seguimiento -->
         <section id="view-seguimiento" class="view" hidden>
-          <h2 class="view__title">Seguimiento de trámites</h2>
+          <!-- <h2 class="view__title">Seguimiento de trámites</h2> -->
           <div class="seg-grid">
             <article class="panel seg-left" aria-labelledby="seg-list-title">
               <div class="panel__header">
@@ -422,7 +427,7 @@
 
         <!-- Vista: Notificaciones -->
         <section id="view-notificaciones" class="view" hidden>
-          <h2 class="view__title">Notificaciones y preferencias</h2>
+          <!-- <h2 class="view__title">Notificaciones y preferencias</h2> -->
 
           <section class="stats">
             <div class="stat"><div class="stat__icon">✈️</div><div class="stat__value" id="co-stat-unread">0</div><div class="stat__label">Mensajes sin leer</div></div>
@@ -521,7 +526,7 @@
 
         <!-- Vista: Reportes -->
         <section id="view-reportes" class="view" hidden>
-          <h2 class="view__title">Reportes y análisis</h2>
+          <!-- <h2 class="view__title">Reportes y análisis</h2> -->
 
           <div class="rep-toolbar">
             <label class="field field--inline"><span class="label">Desde</span><input id="rep-desde" class="select" type="date" /></label>
@@ -609,10 +614,222 @@
             </div>
           </article>
         </section>
+
+        <!-- Vista: Administración del sistema -->
+        <section id="view-admin" class="view" hidden>
+          <article class="panel" aria-labelledby="adm-status-title">
+            <div class="panel__header"><h3 id="adm-status-title">Estado del sistema</h3></div>
+            <div class="adm-grid">
+              <label class="cfg-item">
+                <span class="cfg-icon">🛠️</span>
+                <span class="cfg-text"><strong>Mantenimiento</strong><br/><small>Activa el modo de mantenimiento a todos</small></span>
+                <span class="cfg-spacer"></span>
+                <input id="adm-maint" type="checkbox" class="switch" />
+              </label>
+              <div class="cfg-item">
+                <span class="cfg-icon">📝</span>
+                <div class="cfg-text"><strong>Mensaje global</strong><br/><small>Se muestra en un banner superior</small></div>
+                <div class="cfg-spacer"></div>
+                <input id="adm-banner" class="select" placeholder="Ej. Mantenimiento hoy 22:00-23:00" />
+              </div>
+              <div class="cfg-item">
+                <span class="cfg-icon">🔁</span>
+                <div class="cfg-text"><strong>Auto-logout</strong><br/><small>Minutos de inactividad</small></div>
+                <div class="cfg-spacer"></div>
+                <input id="adm-timeout" type="number" min="1" step="1" class="select" style="width:120px" placeholder="30" />
+              </div>
+            </div>
+          </article>
+
+          <article class="panel" aria-labelledby="adm-brand-title">
+            <div class="panel__header"><h3 id="adm-brand-title">Identidad y apariencia</h3></div>
+            <div class="adm-grid">
+              <div class="cfg-item">
+                <span class="cfg-icon">🎨</span>
+                <div class="cfg-text"><strong>Color primario</strong><br/><small>Hex o palabra CSS</small></div>
+                <div class="cfg-spacer"></div>
+                <input id="adm-color" class="select" placeholder="#2db244" />
+              </div>
+              <div class="cfg-item">
+                <span class="cfg-icon">🖼️</span>
+                <div class="cfg-text"><strong>Logo</strong><br/><small>URL o dejar vacío para usar el predeterminado</small></div>
+                <div class="cfg-spacer"></div>
+                <input id="adm-logo" class="select" placeholder="recursos/logo.png" />
+              </div>
+            </div>
+          </article>
+
+          <article class="panel" aria-labelledby="adm-sec-title">
+            <div class="panel__header"><h3 id="adm-sec-title">Seguridad y acceso</h3></div>
+            <div class="adm-grid">
+              <label class="cfg-item">
+                <span class="cfg-icon">🔒</span>
+                <span class="cfg-text"><strong>2FA obligatorio</strong><br/><small>Al iniciar sesión</small></span>
+                <span class="cfg-spacer"></span>
+                <input id="adm-2fa" type="checkbox" class="switch" />
+              </label>
+              <label class="cfg-item">
+                <span class="cfg-icon">🔁</span>
+                <span class="cfg-text"><strong>Rotar contraseñas</strong><br/><small>Cada N días</small></span>
+                <span class="cfg-spacer"></span>
+                <input id="adm-rotate" type="number" min="0" step="1" class="select" style="width:120px" placeholder="90" />
+              </label>
+            </div>
+          </article>
+
+          <article class="panel" aria-labelledby="adm-notif-title">
+            <div class="panel__header"><h3 id="adm-notif-title">Notificaciones por defecto</h3></div>
+            <div class="adm-grid">
+              <label class="cfg-item">
+                <span class="cfg-icon">💬</span>
+                <span class="cfg-text"><strong>WhatsApp</strong><br/><small>Habilitado por defecto</small></span>
+                <span class="cfg-spacer"></span>
+                <input id="adm-def-wa" type="checkbox" class="switch" />
+              </label>
+              <label class="cfg-item">
+                <span class="cfg-icon">✉️</span>
+                <span class="cfg-text"><strong>Correo</strong><br/><small>Habilitado por defecto</small></span>
+                <span class="cfg-spacer"></span>
+                <input id="adm-def-mail" type="checkbox" class="switch" checked />
+              </label>
+              <label class="cfg-item">
+                <span class="cfg-icon">📱</span>
+                <span class="cfg-text"><strong>App</strong><br/><small>Habilitado por defecto</small></span>
+                <span class="cfg-spacer"></span>
+                <input id="adm-def-app" type="checkbox" class="switch" checked />
+              </label>
+              <label class="cfg-item">
+                <span class="cfg-icon">📨</span>
+                <span class="cfg-text"><strong>SMS</strong><br/><small>Habilitado por defecto</small></span>
+                <span class="cfg-spacer"></span>
+                <input id="adm-def-sms" type="checkbox" class="switch" />
+              </label>
+            </div>
+          </article>
+
+          <article class="panel" aria-labelledby="adm-sla-title">
+            <div class="panel__header"><h3 id="adm-sla-title">Objetivos de servicio (SLA)</h3></div>
+            <div class="adm-grid">
+              <div class="cfg-item">
+                <span class="cfg-icon">⏱️</span>
+                <div class="cfg-text"><strong>Certificados</strong><br/><small>Días objetivo</small></div>
+                <div class="cfg-spacer"></div>
+                <input id="adm-sla-cert" type="number" min="1" step="1" class="select" style="width:120px" placeholder="3" />
+              </div>
+              <div class="cfg-item">
+                <span class="cfg-icon">🧭</span>
+                <div class="cfg-text"><strong>Cambio de carrera</strong><br/><small>Días objetivo</small></div>
+                <div class="cfg-spacer"></div>
+                <input id="adm-sla-cambio" type="number" min="1" step="1" class="select" style="width:120px" placeholder="7" />
+              </div>
+              <div class="cfg-item">
+                <span class="cfg-icon">📚</span>
+                <div class="cfg-text"><strong>Homologación</strong><br/><small>Días objetivo</small></div>
+                <div class="cfg-spacer"></div>
+                <input id="adm-sla-homol" type="number" min="1" step="1" class="select" style="width:120px" placeholder="10" />
+              </div>
+              <div class="cfg-item">
+                <span class="cfg-icon">🪪</span>
+                <div class="cfg-text"><strong>Baja de matrícula</strong><br/><small>Días objetivo</small></div>
+                <div class="cfg-spacer"></div>
+                <input id="adm-sla-baja" type="number" min="1" step="1" class="select" style="width:120px" placeholder="5" />
+              </div>
+            </div>
+          </article>
+
+          <article class="panel" aria-labelledby="adm-data-title">
+            <div class="panel__header"><h3 id="adm-data-title">Datos y copias de seguridad</h3></div>
+            <div class="adm-grid">
+              <div class="cfg-item">
+                <span class="cfg-icon">💾</span>
+                <div class="cfg-text"><strong>Exportar configuración</strong><br/><small>Descarga un JSON con los ajustes</small></div>
+                <div class="cfg-spacer"></div>
+                <button id="adm-export" class="btn-ghost" type="button">Exportar</button>
+              </div>
+              <div class="cfg-item">
+                <span class="cfg-icon">📥</span>
+                <div class="cfg-text"><strong>Importar configuración</strong><br/><small>Selecciona un archivo JSON</small></div>
+                <div class="cfg-spacer"></div>
+                <input id="adm-import" type="file" accept="application/json" class="select" />
+              </div>
+            </div>
+            <div class="form-actions">
+              <button id="adm-reset" type="button" class="btn-ghost">Restablecer</button>
+              <button id="adm-save" type="button" class="btn-primary">Guardar cambios</button>
+            </div>
+          </article>
+
+          <article class="panel" aria-labelledby="adm-users-title">
+            <div class="panel__header"><h3 id="adm-users-title">Usuarios del sistema</h3></div>
+            <section class="stats">
+              <div class="stat"><div class="stat__icon">👥</div><div class="stat__value" id="u-total">0</div><div class="stat__label">Totales</div></div>
+              <div class="stat"><div class="stat__icon">🟢</div><div class="stat__value" id="u-activos">0</div><div class="stat__label">Activos</div></div>
+              <div class="stat"><div class="stat__icon">⛔</div><div class="stat__value" id="u-bloq">0</div><div class="stat__label">Bloqueados</div></div>
+              <div class="stat"><div class="stat__icon">🕒</div><div class="stat__value" id="u-last">—</div><div class="stat__label">Último acceso</div></div>
+              <div class="stat"><div class="stat__icon">🔐</div><div class="stat__value" id="u-2fa">0%</div><div class="stat__label">Con 2FA</div></div>
+            </section>
+
+            <div class="rep-toolbar" style="margin-top:4px">
+              <label class="field field--inline"><span class="label">Rol</span>
+                <select id="u-fil-rol" class="select" disabled>
+                  <option selected>Coordinador</option>
+                </select>
+              </label>
+              <label class="field field--inline"><span class="label">Estado</span>
+                <select id="u-fil-estado" class="select">
+                  <option value="">Todos</option>
+                  <option value="activo">Activo</option>
+                  <option value="bloqueado">Bloqueado</option>
+                </select>
+              </label>
+              <label class="field field--inline"><span class="label">Buscar</span>
+                <input id="u-q" class="select" placeholder="Nombre, correo…" />
+              </label>
+              <div class="spacer"></div>
+              <button id="u-clear" class="btn-ghost" type="button">Limpiar</button>
+            </div>
+
+            <div class="rep-table-wrap">
+              <table class="rep-table" id="u-table" aria-label="Tabla de usuarios">
+                <thead>
+                  <tr>
+                    <th>Usuario</th><th>Correo</th><th>Rol</th><th>Carrera</th><th>Estado</th><th>Último acceso</th><th>2FA</th><th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </article>
+        </section>
       </main>
     </div>
 
-    <!-- Reuse the same Coordinator JS to get identical functionality -->
-    <script src="modulo-coordinador.js"></script>
+  <!-- JS específico del Decano -->
+  <script src="modulo-decano.js"></script>
+      <!-- Modal: Detalle de notificación -->
+      <div id="notif-modal" class="modal" hidden>
+        <div class="modal__backdrop" data-close="1"></div>
+        <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="notif-modal-title">
+          <div class="modal__header">
+            <h3 id="notif-modal-title">Detalle de notificación</h3>
+            <button id="notif-close" class="btn-ghost" type="button">✕</button>
+          </div>
+          <div class="modal__body">
+            <div id="notif-meta" style="display:flex;gap:10px;align-items:flex-start;margin-bottom:8px">
+              <div id="notif-ico" class="notif-card__icon">🔔</div>
+              <div>
+                <div id="notif-title" class="notif-card__title">—</div>
+                <div id="notif-desc" class="notif-card__desc" style="margin-top:4px">—</div>
+                <div id="notif-time" class="notif-card__time" style="margin-top:6px">—</div>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button id="notif-goto" class="btn-primary" type="button">Ir al trámite</button>
+              <button id="notif-mark" class="btn-ghost" type="button">Marcar como leído</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
   </body>
 </html>

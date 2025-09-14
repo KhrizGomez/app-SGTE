@@ -182,7 +182,7 @@
 
         <!-- Vista: Solicitudes (Estudiante) -->
         <section id="view-solicitudes" class="view" hidden>
-          <h2 class="view__title">Registro de solicitud</h2>
+          <!-- <h2 class="view__title">Registro de solicitud</h2> -->
 
           <div class="soli-toolbar">
             <div class="spacer"></div>
@@ -288,7 +288,7 @@
 
         <!-- Vista: Seguimiento (Estudiante) -->
         <section id="view-seguimiento" class="view" hidden>
-          <h2 class="view__title">Seguimiento de trámites</h2>
+          <!-- <h2 class="view__title">Seguimiento de trámites</h2> -->
 
           <article class="panel seg-search" aria-labelledby="seg-search-title">
             <div class="panel__header">
@@ -354,7 +354,7 @@
 
         <!-- Vista: Asistente IA (Estudiante) -->
         <section id="view-asistente" class="view" hidden>
-          <h2 class="view__title">Asistente de inteligencia artificial</h2>
+          <!-- <h2 class="view__title">Asistente de inteligencia artificial</h2> -->
           <div class="chat">
             <div class="chat__window" id="chat-window" aria-live="polite">
               <div class="msg msg--ia">
@@ -385,7 +385,7 @@
 
         <!-- Vista: Notificaciones (Estudiante) -->
         <section id="view-notificaciones" class="view" hidden>
-          <h2 class="view__title">Configuración y historial de notificaciones</h2>
+          <!-- <h2 class="view__title">Configuración y historial de notificaciones</h2> -->
 
           <section class="stats">
             <div class="stat"><div class="stat__icon">✈️</div><div class="stat__value">12</div><div class="stat__label">Mensajes sin leer</div></div>
@@ -485,6 +485,31 @@
           </article>
         </section>
       </main>
+    </div>
+
+    <!-- Modal detalle de notificación (Estudiante) -->
+    <div id="st-notif-modal" class="modal" hidden>
+      <div class="modal__backdrop" data-close="1"></div>
+      <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="st-notif-title">
+        <div class="modal__header">
+          <h3 id="st-notif-title">Detalle de notificación</h3>
+          <button id="st-notif-close" class="btn-ghost" type="button">✕</button>
+        </div>
+        <div class="modal__body">
+          <div id="st-notif-meta" style="display:flex;gap:10px;align-items:flex-start;margin-bottom:8px">
+            <div id="st-notif-ico" class="notif-card__icon">🔔</div>
+            <div>
+              <div id="st-notif-head" class="notif-card__title">—</div>
+              <div id="st-notif-desc" class="notif-card__desc" style="margin-top:4px">—</div>
+              <div id="st-notif-time" class="notif-card__time" style="margin-top:6px">—</div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button id="st-notif-goto" class="btn-primary" type="button">Ir al trámite</button>
+            <button id="st-notif-mark" class="btn-ghost" type="button">Marcar como leído</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script src="modulo-estudiante.js"></script>
