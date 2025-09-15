@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const viewSeguimiento = document.getElementById('view-seguimiento');
   const viewNotifs = document.getElementById('view-notificaciones');
   const viewReportes = document.getElementById('view-reportes');
+  const statusBar = document.getElementById('status');
+  const pushWrap = document.getElementById('push');
 
   function hideAll(){
     [viewDashboard, viewSolicitudes, viewSeguimiento, viewNotifs, viewReportes].forEach(v => {
@@ -42,6 +44,30 @@ document.addEventListener('DOMContentLoaded', () => {
   // Logout
   const logoutBtn = document.querySelector('.power');
   if (logoutBtn) logoutBtn.addEventListener('click', ()=> window.location.href = 'index.html');
+
+  // Push notifications (emergent top-right)
+  function push(msg, kind='info', ms=3000){
+    if(!pushWrap){
+      if(statusBar){
+        statusBar.className = `status ${kind}`;
+        statusBar.textContent = msg;
+        statusBar.hidden = false;
+        clearTimeout(statusBar._t);
+        statusBar._t = setTimeout(()=>{ statusBar.hidden = true; }, ms);
+      }
+      return;
+    }
+    const el = document.createElement('div');
+    el.className = `push ${kind}`;
+    el.innerHTML = `<div class="msg">${msg}</div><button class="close" aria-label="Cerrar">×</button>`;
+    const closer = el.querySelector('.close');
+    const remove = ()=>{ el.style.animation = 'push-out .2s ease-in forwards'; setTimeout(()=> el.remove(), 180); };
+    closer?.addEventListener('click', remove);
+    pushWrap.appendChild(el);
+    setTimeout(remove, ms);
+  }
+
+  function showStatus(msg, kind='info', ms=2600){ push(msg, kind, ms); }
 
   // Bars chart
   const data = [9, 11, 19, 22, 7];
@@ -331,7 +357,7 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', (e)=>{
       e.preventDefault();
       const data = getForm();
-      if(!data.titulo){ alert('El título es obligatorio'); fldTitulo.focus(); return; }
+  if(!data.titulo){ showStatus('El título es obligatorio', 'warn'); fldTitulo.focus(); return; }
       const idx = rows.findIndex(r => r.id === data.id);
       if(idx >= 0){ rows[idx] = data; } else { rows.unshift(data); }
       renderCards();
@@ -653,7 +679,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if(rejModal){ rejModal.addEventListener('click', (e)=>{ if(e.target?.dataset?.close) closeRejModal(); }); }
   if(rejConfirm){ rejConfirm.addEventListener('click', ()=>{
     const reason = rejReason?.value?.trim();
-    if(!reason){ alert('Por favor, indica el motivo del rechazo.'); return; }
+  if(!reason){ showStatus('Por favor, indica el motivo del rechazo.', 'warn'); return; }
     const c = casos.find(x => x.id === rejTargetId);
     if(!c) { closeRejModal(); return; }
     const now = new Date().toISOString().slice(0,10);
@@ -786,7 +812,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     localStorage.setItem('coNotifPrefs', JSON.stringify(p));
     updateCoStats();
-    alert('Preferencias guardadas');
+  showStatus('Preferencias guardadas', 'success');
   }
   function resetCoPrefs(){
     localStorage.removeItem('coNotifPrefs');
@@ -812,7 +838,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <div class="notif-card__time">${n.time}</div>
       `;
-      li.querySelector('.js-read')?.addEventListener('click', ()=>{ n.read = true; renderCoNotifs(); updateCoStats(); });
+  li.querySelector('.js-read')?.addEventListener('click', ()=>{ n.read = true; renderCoNotifs(); updateCoStats(); try{ showStatus('Notificación marcada como leída','success'); }catch{} });
       li.querySelector('.js-detail')?.addEventListener('click', ()=> openNotifModal(n));
       coNotifList.appendChild(li);
     });
@@ -841,7 +867,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function closeNotifModal(){ if(notifModal) notifModal.hidden = true; }
   notifClose?.addEventListener('click', closeNotifModal);
   notifModal?.addEventListener('click', (e)=>{ if(e.target?.dataset?.close) closeNotifModal(); });
-  notifMark?.addEventListener('click', ()=>{ const n = coNotifs.find(x=>x.id===notifCtx.id); if(n){ n.read = true; renderCoNotifs(); } closeNotifModal(); });
+  notifMark?.addEventListener('click', ()=>{ const n = coNotifs.find(x=>x.id===notifCtx.id); if(n){ n.read = true; renderCoNotifs(); try{ showStatus('Notificación marcada como leída','success'); }catch{} } closeNotifModal(); });
   notifGoto?.addEventListener('click', ()=>{
     // Navigate to Seguimiento and select case if we can parse it
     const caseId = notifCtx.caseId;

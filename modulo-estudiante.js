@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const viewSeguimiento = document.getElementById('view-seguimiento');
   const viewAsistente = document.getElementById('view-asistente');
   const viewNotifs = document.getElementById('view-notificaciones');
+  const statusBar = document.getElementById('status');
+  const pushWrap = document.getElementById('push');
 
   function hideAll(){
     [viewDashboard, viewSolicitudes, viewSeguimiento, viewAsistente, viewNotifs].forEach(v => {
@@ -49,11 +51,35 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Push notifications (emergent top-right)
+  function push(msg, kind='info', ms=3000){
+    if(!pushWrap){
+      if(statusBar){
+        statusBar.className = `status ${kind}`;
+        statusBar.textContent = msg;
+        statusBar.hidden = false;
+        clearTimeout(statusBar._t);
+        statusBar._t = setTimeout(()=>{ statusBar.hidden = true; }, ms);
+      }
+      return;
+    }
+    const el = document.createElement('div');
+    el.className = `push ${kind}`;
+    el.innerHTML = `<div class="msg">${msg}</div><button class="close" aria-label="Cerrar">×</button>`;
+    const closer = el.querySelector('.close');
+    const remove = ()=>{ el.style.animation = 'push-out .2s ease-in forwards'; setTimeout(()=> el.remove(), 180); };
+    closer?.addEventListener('click', remove);
+    pushWrap.appendChild(el);
+    setTimeout(remove, ms);
+  }
+
+  function showStatus(msg, kind='info', ms=2600){ push(msg, kind, ms); }
+
   // Buscador (demo) en Seguimiento
   const btnBuscar = document.getElementById('seg-buscar');
   if(btnBuscar){
     btnBuscar.addEventListener('click', () => {
-      alert('Búsqueda ejecutada (demo)');
+      showStatus('Búsqueda ejecutada (demo)', 'info');
     });
   }
 
@@ -275,7 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const id = stId.value;
       const tramite = stTramite.value;
-      alert(`Solicitud enviada: ${tramite} (Ref: ${id})`);
+  showStatus(`Solicitud enviada: ${tramite} (Ref: ${id})`, 'success');
       closeStModal();
     });
   }
@@ -318,6 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if(!li) return;
       if(t.classList.contains('js-read')){
         li.style.opacity = .55; t.setAttribute('disabled',''); t.textContent = 'Leído';
+        try{ showStatus('Notificación marcada como leída','success'); }catch{}
         return;
       }
       // If clicked primary button or body, open details
@@ -330,6 +357,7 @@ document.addEventListener('DOMContentLoaded', () => {
   stNotifMark?.addEventListener('click', ()=>{
     const btn = stNotifCtx.li?.querySelector('.js-read');
     if(btn){ btn.click(); }
+    else { try{ showStatus('Notificación marcada como leída','success'); }catch{} }
     stCloseNotifModal();
   });
   stNotifGoto?.addEventListener('click', ()=>{
@@ -355,7 +383,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if(btnSave){ btnSave.addEventListener('click', ()=>{
     const prefs = {}; inputs.forEach(inp => prefs[inp.id] = inp.checked);
     localStorage.setItem(storageKey, JSON.stringify(prefs));
-    alert('Preferencias guardadas');
+  showStatus('Preferencias guardadas', 'success');
   });}
   // Restablecer
   if(btnReset){ btnReset.addEventListener('click', ()=>{

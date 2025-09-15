@@ -1,12 +1,21 @@
 /* Base reset & variables */
 :root{
+  /* Brand palette from user */
+  --green-700: #04873C; /* deep */
+  --green-600: #058C33; /* primary */
+  --green-500: #30AC32; /* accent */
+  --gold-600: #CB9B0A;  /* deep warn */
+  --gold-500: #DCA625;  /* warn */
+  --sand-50:  #EFE2CB;  /* soft background */
+
+  /* App tokens */
   --bg: #0f0f10;
   --card: #ffffff;
   --muted: #f0f2f4;
   --text: #1a1d21;
   --subtext: #5a6872;
-  --primary: #2db244; /* green similar to UTEQ */
-  --primary-press: #239437;
+  --primary: var(--green-600);
+  --primary-press: var(--green-700);
   --dark: #111112;
   --chip: #e9ecef;
   --chip-text: #28303a;
@@ -196,4 +205,15 @@ body{
 .dz-files li{display:flex;gap:8px;align-items:center;background:#fff;border:1px solid #e6e8eb;border-radius:10px;padding:8px}
 .dz-files .name{font-weight:700}
 .dz-files .size{margin-left:auto;color:#6b7280;font-size:12px}
+
+/* Push notifications (emergent top-right) for login */
+.push-container{position:fixed;top:18px;right:18px;z-index:60;display:flex;flex-direction:column;gap:10px;max-width:min(380px, 90vw)}
+.push{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:10px;border:1px solid #e6e8eb;background:#ffffff;box-shadow:0 10px 25px rgba(0,0,0,.12);color:#111827;opacity:0;transform:translateY(-8px);animation:push-in .2s ease-out forwards}
+.push.success{border-color:var(--green-500);background:#eaf9ee;color:#0b2912}
+.push.warn{border-color:var(--gold-500);background:var(--sand-50);color:#5a3b00}
+.push.info{border-color:#3b82f6;background:#eff6ff;color:#1e3a8a}
+.push.error{border-color:#ef4444;background:#fef2f2;color:#7f1d1d}
+.push .close{margin-left:auto;background:transparent;border:0;cursor:pointer;color:inherit;font-size:16px;line-height:1}
+@keyframes push-in{to{opacity:1;transform:translateY(0)}}
+@keyframes push-out{to{opacity:0;transform:translateY(-8px)}}
 

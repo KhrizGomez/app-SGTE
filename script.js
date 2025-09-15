@@ -1,6 +1,18 @@
 // Simple UI interactions: toggle role chips and demo form submit
 
 document.addEventListener('DOMContentLoaded', () => {
+  const pushWrap = document.getElementById('push');
+  function push(msg, kind='info', ms=3000){
+    if(!pushWrap){ console.log(`[${kind}]`, msg); return; }
+    const el = document.createElement('div');
+    el.className = `push ${kind}`;
+    el.innerHTML = `<div class="msg">${msg}</div><button class="close" aria-label="Cerrar">×</button>`;
+    const closer = el.querySelector('.close');
+    const remove = ()=>{ el.style.animation = 'push-out .2s ease-in forwards'; setTimeout(()=> el.remove(), 180); };
+    closer?.addEventListener('click', remove);
+    pushWrap.appendChild(el);
+    setTimeout(remove, ms);
+  }
   const chips = Array.from(document.querySelectorAll('.chip'));
   const optsContainer = document.getElementById('role-options');
   let selectedRole = null;
@@ -45,9 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
           </span>
         `;
         card.addEventListener('click', () => {
-          // Mantenerse en esta pantalla y mostrar acción simulada
           console.log('Estudiante ->', op.key);
-          alert(`Seleccionaste: ${op.title}`);
+          push(`Seleccionaste: ${op.title}`, 'info');
         });
         grid.appendChild(card);
       });
@@ -100,13 +111,10 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(form).entries());
-    if (!selectedRole) {
-      alert('Selecciona un rol para continuar.');
-      return;
-    }
+    if (!selectedRole) { push('Selecciona un rol para continuar.', 'warn'); return; }
     // Placeholder: replace with real auth
     console.log('Login:', { ...data, rol: selectedRole });
-    alert(`Bienvenido, ${data.usuario} (rol: ${selectedRole}).`);
+  push(`Bienvenido, ${data.usuario} (rol: ${selectedRole}).`, 'success');
   });
 
   // ==============================
@@ -184,10 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const programa = document.getElementById('ext-programa')?.value?.trim();
       const motivo = document.getElementById('ext-motivo')?.value?.trim();
       const consent = document.getElementById('ext-consent')?.checked;
-      if(!nombre || !email || !telefono || !idNum || !universidad || !programa || !motivo || !consent){
-        alert('Completa todos los campos requeridos y acepta el consentimiento.');
-        return;
-      }
+      if(!nombre || !email || !telefono || !idNum || !universidad || !programa || !motivo || !consent){ push('Completa todos los campos requeridos y acepta el consentimiento.', 'warn'); return; }
       const files = Array.from(extFiles?.files || []).map(f => ({ name:f.name, size:f.size, type:f.type }));
       if(files.length === 0){
         if(!confirm('No has adjuntado documentos. ¿Deseas continuar?')) return;
@@ -211,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
         current: 0
       };
       saveExternalRequest(payload);
-      alert('Tu solicitud fue enviada. Coordinación y Decanato serán notificados para su revisión.');
+  push('Tu solicitud fue enviada. Coordinación y Decanato serán notificados para su revisión.', 'success');
       closeExt();
       extForm.reset();
       renderFiles([]);
@@ -239,9 +244,9 @@ document.addEventListener('DOMContentLoaded', () => {
     fpForm.addEventListener('submit', (e)=>{
       e.preventDefault();
       const email = fpEmail?.value?.trim();
-      if(!email){ alert('Ingresa tu correo institucional'); fpEmail?.focus(); return; }
+  if(!email){ push('Ingresa tu correo institucional', 'warn'); fpEmail?.focus(); return; }
       // Simular envío
-      alert(`Hemos enviado un enlace de recuperación a ${email}.`);
+  push(`Hemos enviado un enlace de recuperación a ${email}.`, 'success');
       closeFp();
       fpForm.reset();
     });

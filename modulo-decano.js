@@ -11,6 +11,37 @@ document.addEventListener('DOMContentLoaded', () => {
   const viewAdmin = document.getElementById('view-admin');
   const sysBanner = document.getElementById('sys-banner');
   const sysBannerText = document.getElementById('sys-banner-text');
+  const statusBar = document.getElementById('status');
+  const pushWrap = document.getElementById('push');
+
+  // Push notifications (emergent top-right)
+  function push(msg, kind='info', ms=3000){
+    if(!pushWrap){
+      // fallback to inline status
+      if(statusBar){
+        statusBar.className = `status ${kind}`;
+        statusBar.textContent = msg;
+        statusBar.hidden = false;
+        clearTimeout(statusBar._t);
+        statusBar._t = setTimeout(()=>{ statusBar.hidden = true; }, ms);
+      }
+      return;
+    }
+    const el = document.createElement('div');
+    el.className = `push ${kind}`;
+    el.innerHTML = `<div class="msg">${msg}</div><button class="close" aria-label="Cerrar">×</button>`;
+    const closer = el.querySelector('.close');
+    const remove = ()=>{
+      el.style.animation = 'push-out .2s ease-in forwards';
+      setTimeout(()=> el.remove(), 180);
+    };
+    closer?.addEventListener('click', remove);
+    pushWrap.appendChild(el);
+    setTimeout(remove, ms);
+  }
+
+  // Keep API compatibility with existing calls
+  function showStatus(msg, kind='info', ms=2600){ push(msg, kind, ms); }
 
   function hideAll(){
     [viewDashboard, viewSolicitudes, viewSeguimiento, viewNotifs, viewReportes, viewAdmin].forEach(v => {
@@ -108,6 +139,12 @@ document.addEventListener('DOMContentLoaded', () => {
     { id: 'T-1002', titulo: 'Certificados académicos', tipo:'Certificados académicos', prioridad:'Media', estado:'En revisión', fecha:'2025-09-20', traza:'basico', custom:[] },
     { id: 'T-1003', titulo: 'Cambio de carrera', tipo:'Cambio de carrera', prioridad:'Urgente', estado:'Publicado', fecha:'2025-10-05', traza:'validacion', custom:[] },
     { id: 'T-1004', titulo: 'Baja de matrícula parcial', tipo:'Baja de matrícula', prioridad:'Media', estado:'Borrador', fecha:'2025-09-30', traza:'basico', custom:[] },
+    { id: 'T-1005', titulo: 'Solicitud de beca institucional', tipo:'Otro', prioridad:'Urgente', estado:'En revisión', fecha:'2025-09-18', traza:'validacion', custom:[] },
+    { id: 'T-1006', titulo: 'Actualización de datos personales', tipo:'Otro', prioridad:'Baja', estado:'Publicado', fecha:'2025-10-10', traza:'basico', custom:[] },
+    { id: 'T-1007', titulo: 'Certificado de matrícula', tipo:'Certificados académicos', prioridad:'Media', estado:'Publicado', fecha:'2025-09-22', traza:'basico', custom:[] },
+    { id: 'T-1008', titulo: 'Convalidación internacional de asignaturas', tipo:'Homologación', prioridad:'Alta', estado:'En revisión', fecha:'2025-10-01', traza:'homologacion', custom:[] },
+    { id: 'T-1009', titulo: 'Reactivación de matrícula', tipo:'Otro', prioridad:'Alta', estado:'En revisión', fecha:'2025-09-28', traza:'validacion', custom:[] },
+    { id: 'T-1010', titulo: 'Cambio de paralelo', tipo:'Otro', prioridad:'Baja', estado:'Borrador', fecha:'2025-09-19', traza:'basico', custom:[] },
   ];
   let filter = '';
   let fTipo = '';
@@ -262,7 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
   filClear?.addEventListener('click', ()=>{ fTipo=fPrio=fEstado=''; filter=''; if(filTipo)filTipo.value=''; if(filPrio)filPrio.value=''; if(filEstado)filEstado.value=''; if(txtBuscar)txtBuscar.value=''; renderCards(); });
   selTraza?.addEventListener('change', ()=>{ handleCustomVisibility(); updateTrazaPreview(); });
   stepAdd?.addEventListener('click', ()=>{ const name = stepName.value.trim(); const role = stepRole?.value || 'Decano'; if(!name) return; addStep(name, role); stepName.value=''; updateTrazaPreview(); });
-  form?.addEventListener('submit', (e)=>{ e.preventDefault(); const data = getForm(); if(!data.titulo){ alert('El título es obligatorio'); fldTitulo.focus(); return; } const idx = rows.findIndex(r => r.id === data.id); if(idx>=0){ rows[idx]=data; } else { rows.unshift(data); } renderCards(); closeModal(); });
+  form?.addEventListener('submit', (e)=>{ e.preventDefault(); const data = getForm(); if(!data.titulo){ showStatus('El título es obligatorio', 'warn'); fldTitulo.focus(); return; } const idx = rows.findIndex(r => r.id === data.id); if(idx>=0){ rows[idx]=data; } else { rows.unshift(data); } renderCards(); closeModal(); });
   btnCancel?.addEventListener('click', closeModal);
 
   grid?.addEventListener('click', (e)=>{
@@ -323,6 +360,14 @@ document.addEventListener('DOMContentLoaded', () => {
   let casos = [
     { id:'C-2101', titulo:'Cambio de carrera - Juan Pérez', estudiante:'Juan Pérez', tipo:'Cambio de carrera', prioridad:'Alta', estado:'En proceso', creado:'2025-09-02', actualizado:'2025-09-04', traza:'validacion', files:[{name:'Solicitud.pdf', size:'120 KB'}], steps: flowMap.validacion.map((s,idx)=>({ ...s, started: idx===0? '2025-09-02': null, done: idx<1? '2025-09-03': null })), current: 1 },
     { id:'C-2102', titulo:'Homologación de materias - María López', estudiante:'María López', tipo:'Homologación', prioridad:'Urgente', estado:'En proceso', creado:'2025-09-01', actualizado:'2025-09-05', traza:'homologacion', files:[{name:'Programas.pdf', size:'1.2 MB'}], steps: flowMap.homologacion.map((s,idx)=>({ ...s, started: idx===0? '2025-09-01': null, done: idx<2? (idx===0? '2025-09-02':'2025-09-04') : null })), current: 2 },
+    { id:'C-2103', titulo:'Certificados académicos - Pedro Gómez', estudiante:'Pedro Gómez', tipo:'Certificados académicos', prioridad:'Media', estado:'Publicado', creado:'2025-09-03', actualizado:'2025-09-06', traza:'basico', files:[{name:'Solicitud.pdf', size:'80 KB'}], steps: flowMap.basico.map((s,idx)=>({ ...s, started: idx===0? '2025-09-03' : null, done: idx<1? '2025-09-04': null })), current: 1 },
+    { id:'C-2104', titulo:'Baja de matrícula - Lucía Vega', estudiante:'Lucía Vega', tipo:'Baja de matrícula', prioridad:'Media', estado:'Borrador', creado:'2025-09-07', actualizado:'2025-09-07', traza:'basico', files:[], steps: flowMap.basico.map((s)=>({ ...s })), current: 0 },
+    { id:'C-2105', titulo:'Cambio de paralelo - Álvaro Ruiz', estudiante:'Álvaro Ruiz', tipo:'Otro', prioridad:'Baja', estado:'En proceso', creado:'2025-09-08', actualizado:'2025-09-09', traza:'basico', files:[{name:'Justificación.pdf', size:'210 KB'}], steps: flowMap.basico.map((s,idx)=>({ ...s, started: idx===0? '2025-09-08' : null, done: null })), current: 0 },
+    { id:'C-2106', titulo:'Corrección de notas - Elena Díaz', estudiante:'Elena Díaz', tipo:'Otro', prioridad:'Urgente', estado:'En proceso', creado:'2025-09-04', actualizado:'2025-09-06', traza:'validacion', files:[{name:'Evidencia.png', size:'320 KB'}], steps: flowMap.validacion.map((s,idx)=>({ ...s, started: idx===0? '2025-09-04' : null, done: idx<2? (idx===0? '2025-09-05':'2025-09-06') : null })), current: 2 },
+    { id:'C-2107', titulo:'Solicitud de beca - Javier León', estudiante:'Javier León', tipo:'Otro', prioridad:'Alta', estado:'En proceso', creado:'2025-09-10', actualizado:'2025-09-11', traza:'validacion', files:[{name:'Formulario.pdf', size:'95 KB'}], steps: flowMap.validacion.map((s,idx)=>({ ...s, started: idx===0? '2025-09-10' : null, done: null })), current: 1 },
+    { id:'C-2108', titulo:'Validación de sílabo - Sara Molina', estudiante:'Sara Molina', tipo:'Otro', prioridad:'Media', estado:'Publicado', creado:'2025-09-05', actualizado:'2025-09-08', traza:'basico', files:[], steps: flowMap.basico.map((s,idx)=>({ ...s, started: idx===0? '2025-09-05': null, done: idx<1? '2025-09-06' : null })), current: 1 },
+    { id:'C-2109', titulo:'Aval de prácticas - Hugo Rivas', estudiante:'Hugo Rivas', tipo:'Otro', prioridad:'Media', estado:'En proceso', creado:'2025-09-12', actualizado:'2025-09-13', traza:'validacion', files:[{name:'Carta.pdf', size:'140 KB'}], steps: flowMap.validacion.map((s,idx)=>({ ...s, started: idx===0? '2025-09-12': null, done: null })), current: 1 },
+    { id:'C-2110', titulo:'Solicitud de titulación - Karla Peña', estudiante:'Karla Peña', tipo:'Otro', prioridad:'Alta', estado:'Borrador', creado:'2025-09-14', actualizado:'2025-09-14', traza:'basico', files:[], steps: flowMap.basico.map((s)=>({ ...s })), current: 0 },
   ];
 
   // Merge external requests (from login page) into casos if not present yet
@@ -471,7 +516,7 @@ document.addEventListener('DOMContentLoaded', () => {
   rejModal?.addEventListener('click', (e)=>{ if(e.target?.dataset?.close) closeRejModal(); });
   rejConfirm?.addEventListener('click', ()=>{
     const reason = rejReason?.value?.trim();
-    if(!reason){ alert('Por favor, indica el motivo del rechazo.'); return; }
+    if(!reason){ showStatus('Por favor, indica el motivo del rechazo.', 'warn'); return; }
     const c = casos.find(x => x.id === rejTargetId);
     if(!c) { closeRejModal(); return; }
     const now = new Date().toISOString().slice(0,10);
@@ -581,7 +626,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     localStorage.setItem('deNotifPrefs', JSON.stringify(p));
     updateCoStats();
-    alert('Preferencias guardadas');
+  showStatus('Preferencias guardadas', 'success');
   }
   function resetCoPrefs(){ localStorage.removeItem('deNotifPrefs'); loadCoPrefs(); updateCoStats(); }
 
@@ -603,7 +648,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <div class="notif-card__time">${n.time}</div>
       `;
-      li.querySelector('.js-read')?.addEventListener('click', ()=>{ n.read = true; renderCoNotifs(); updateCoStats(); });
+  li.querySelector('.js-read')?.addEventListener('click', ()=>{ n.read = true; renderCoNotifs(); updateCoStats(); try{ showStatus('Notificación marcada como leída','success'); }catch{} });
       li.querySelector('.js-detail')?.addEventListener('click', ()=> openNotifModal(n));
       coNotifList.appendChild(li);
     });
@@ -632,7 +677,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function closeNotifModal(){ if(notifModal) notifModal.hidden = true; }
   notifClose?.addEventListener('click', closeNotifModal);
   notifModal?.addEventListener('click', (e)=>{ if(e.target?.dataset?.close) closeNotifModal(); });
-  notifMark?.addEventListener('click', ()=>{ const n = coNotifs.find(x=>x.id===notifCtx.id); if(n){ n.read = true; renderCoNotifs(); } closeNotifModal(); });
+  notifMark?.addEventListener('click', ()=>{ const n = coNotifs.find(x=>x.id===notifCtx.id); if(n){ n.read = true; renderCoNotifs(); try{ showStatus('Notificación marcada como leída','success'); }catch{} } closeNotifModal(); });
   notifGoto?.addEventListener('click', ()=>{
     const caseId = notifCtx.caseId;
     const itemSeguimiento = Array.from(document.querySelectorAll('.nav__item')).find(a=>a.getAttribute('data-key')==='seguimiento');
@@ -896,12 +941,12 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem(SYS_KEY, JSON.stringify(p));
     applyBanner(p);
     applyBranding(p);
-    alert('Configuración guardada');
+  showStatus('Configuración guardada', 'success');
   }
   function resetSysSettings(){
     localStorage.removeItem(SYS_KEY);
     loadSysSettings();
-    alert('Configuración restablecida');
+  showStatus('Configuración restablecida', 'success');
   }
   function exportSysSettings(){
     let p = {};
@@ -914,8 +959,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if(!file) return;
     const reader = new FileReader();
     reader.onload = () => {
-      try{ const p = JSON.parse(String(reader.result||'{}')); localStorage.setItem(SYS_KEY, JSON.stringify(p)); loadSysSettings(); alert('Configuración importada'); }
-      catch{ alert('Archivo inválido'); }
+  try{ const p = JSON.parse(String(reader.result||'{}')); localStorage.setItem(SYS_KEY, JSON.stringify(p)); loadSysSettings(); showStatus('Configuración importada', 'success'); }
+  catch{ showStatus('Archivo inválido', 'warn'); }
     };
     reader.readAsText(file);
   }
