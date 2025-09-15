@@ -12,34 +12,36 @@
   </head>
   <body>
     <div class="layout">
-      <aside class="sidebar">
-        <div class="brand-bar">
-          <img src="recursos/logo.png" alt="UTEQ" />
-        </div>
-        <nav class="nav">
-          <p class="nav__section">Principal</p>
-          <a class="nav__item active" href="#" data-key="dashboard">Dashboard</a>
-          <a class="nav__item" href="#" data-key="solicitudes">Solicitudes</a>
-          <a class="nav__item" href="#" data-key="seguimiento">Seguimiento</a>
-          <p class="nav__section">Herramientas</p>
-          <a class="nav__item" href="#" data-key="asistente">Asistente IA</a>
-          <a class="nav__item" href="#" data-key="notificaciones">Notificaciones</a>
-        </nav>
-        <div class="user">
-          <div class="avatar">K</div>
-          <div class="user__info">
-            <div class="user__name">Khriz Coronel</div>
-            <div class="user__role">Estudiante</div>
+      <div class="content-sidebar">
+        <aside class="sidebar">
+          <div class="brand-bar">
+            <img src="recursos/logo.png" alt="UTEQ" />
           </div>
-          <button class="power" title="Cerrar sesión" aria-label="Cerrar sesión">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M15 4h4v16h-4"/>
-              <path d="M10 7l5 5-5 5"/>
-              <path d="M15 12H3"/>
-            </svg>
-          </button>
-        </div>
-      </aside>
+          <nav class="nav">
+            <p class="nav__section">Principal</p>
+            <a class="nav__item active" href="#" data-key="dashboard">Dashboard</a>
+            <a class="nav__item" href="#" data-key="solicitudes">Solicitudes</a>
+            <a class="nav__item" href="#" data-key="seguimiento">Seguimiento</a>
+            <p class="nav__section">Herramientas</p>
+            <a class="nav__item" href="#" data-key="asistente">Asistente IA</a>
+            <a class="nav__item" href="#" data-key="notificaciones">Notificaciones</a>
+          </nav>
+          <div class="user">
+            <div class="avatar">K</div>
+            <div class="user__info">
+              <div class="user__name">Khriz Coronel</div>
+              <div class="user__role">Estudiante</div>
+            </div>
+            <button class="power" title="Cerrar sesión" aria-label="Cerrar sesión">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M15 4h4v16h-4"/>
+                <path d="M10 7l5 5-5 5"/>
+                <path d="M15 12H3"/>
+              </svg>
+            </button>
+          </div>
+        </aside>
+      </div>
 
       <main class="content">
         <header class="top">
@@ -382,7 +384,7 @@
               </div>
             </div>
             <div class="chat__composer">
-              <textarea id="chat-input" class="chat__input" rows="1" placeholder="Escribe una pregunta… (Shift+Enter para salto de línea)"></textarea>
+              <textarea id="chat-input" class="chat__input" rows="1" placeholder="Escribe una pregunta…"></textarea>
               <button id="chat-send" class="chat__send" title="Enviar">＋</button>
               <button id="chat-clear" class="chat__clear" title="Limpiar">🗑</button>
             </div>

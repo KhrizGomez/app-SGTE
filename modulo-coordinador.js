@@ -70,8 +70,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function showStatus(msg, kind='info', ms=2600){ push(msg, kind, ms); }
 
   // Bars chart
-  const data = [9, 11, 19, 22, 7];
-  const labels = ['Copper','Silver','Gold','Platinum','Diamond'];
+  const data = [15, 11, 28, 45, 17, 22, 31, 29, 12];
+  const labels = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre'];
   const bars = document.getElementById('bars');
   const lbls = document.getElementById('bars-labels');
   if (bars && lbls){

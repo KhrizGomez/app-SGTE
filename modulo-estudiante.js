@@ -84,8 +84,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Simple bar chart (fake data)
-  const data = [8, 11, 20, 22, 5];
-  const labels = ['Copper','Silver','Gold','Platinum','Diamond'];
+  const data = [8, 11, 1, 12, 5, 7, 2, 4, 6];
+  const labels = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre'];
   const bars = document.getElementById('bars');
   const lbls = document.getElementById('bars-labels');
   if (bars && lbls){

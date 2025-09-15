@@ -4,7 +4,7 @@
   --gold-600:#CB9B0A; --gold-500:#DCA625; --sand-50:#EFE2CB;
   /* Base tokens */
   --bg:#f3f4f6; --panel:#ffffff; --text:#1f2937; --muted:#6b7280;
-  --border: var(--green-500);
+  --border:#e5e7eb; /* neutralized */
   --accent: var(--green-600);
 }
 *{box-sizing:border-box}
@@ -71,13 +71,13 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-ser
 .view--active{display:block}
 
 /* Panels */
-.panel{background:var(--panel);border:2px solid var(--border);border-radius:12px;padding:12px}
+.panel{background:var(--panel);border-radius:12px;padding:12px}
 .panel__header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .panel h2{font-size:14px;margin:0}
 
 /* Stats */
 .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin:18px 0}
-.stat{background:var(--panel);border:2px solid var(--border);border-radius:12px;padding:12px}
+.stat{background:var(--panel);border-radius:12px;padding:12px}
 .stat__icon{font-size:20px}
 .stat__value{font-size:26px;font-weight:800;margin-top:6px}
 .stat__label{font-size:12px;color:#4b5563}
@@ -93,16 +93,16 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-ser
 
 /* Notif */
 .notif{list-style:none;margin:0;padding:0;display:grid;gap:10px}
-.notif__item{display:flex;gap:10px;align-items:flex-start;border:2px solid var(--border);border-radius:10px;padding:8px;background:#f8fafb}
+.notif__item{display:flex;gap:10px;align-items:flex-start;border-radius:10px;padding:8px;background:#f8fafb}
 .notif__item--warn{border-color:var(--gold-500)}
-.notif__item--info{border-color:#d9f99d}
+.notif__item--info{border-color:var(--border)}
 .notif .ico{font-size:18px}
 .notif__title{font-weight:700;font-size:13px}
 .notif__desc{font-size:12px;color:#4b5563}
 
 /* Quick actions */
 .qa-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
-.qa-item{width:100%;display:flex;gap:10px;align-items:center;border:2px solid var(--border);border-radius:10px;background:#f8fafb;padding:10px;cursor:pointer;text-align:left}
+.qa-item{width:100%;display:flex;gap:10px;align-items:center;border-radius:10px;background:#f8fafb;padding:10px;cursor:pointer;text-align:left}
 .qa-ico{width:32px;height:32px;border-radius:8px;background:var(--green-500);color:#083d17;display:grid;place-items:center}
 .qa-text small{color:#6b7280}
 
@@ -124,12 +124,12 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-ser
 
 /* Dates / Calendar (reuse from student) */
 .dates{list-style:none;margin:0;padding:0;display:grid;gap:12px}
-.dates li{display:flex;gap:12px;align-items:center;background:#f8fafb;border:2px solid var(--border);border-radius:10px;padding:10px}
+.dates li{display:flex;gap:12px;align-items:center;background:#f8fafb;border-radius:10px;padding:10px}
 .badge{display:inline-grid;place-items:center;background:var(--green-500);color:#083d17;border-radius:10px;padding:8px;font-weight:800;width:54px;font-size:12px}
 .dates__title{font-weight:800;font-size:13px}
 .dates__desc{font-size:12px;color:#4b5563}
 
-.calendar{background:#f8fafb;border:2px solid var(--border);border-radius:10px;padding:10px}
+.calendar{background:#f8fafb;border-radius:10px;padding:10px}
 .cal__head{color:#6b7280;font-size:12px;margin-bottom:6px}
 .cal__week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:6px 0}
 .day{background:#fff;border-radius:8px;display:grid;place-items:center;padding:8px}
@@ -142,7 +142,7 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-ser
 
 /* Cards estilo estudiante (reutiliza clases) */
 .soli-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-.soli-card{display:flex;gap:12px;align-items:center;background:#f8fafb;border:2px solid var(--border);border-radius:12px;padding:16px;cursor:pointer}
+.soli-card{display:flex;gap:12px;align-items:center;background:#f8fafb;border-radius:12px;padding:16px;cursor:pointer}
 .soli-card:hover{box-shadow:0 0 0 3px #dff5e4}
 .soli-ico{width:48px;height:48px;border-radius:12px;background:var(--green-500);color:#083d17;display:grid;place-items:center;font-size:22px}
 .soli-title{font-weight:800}
@@ -156,13 +156,13 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-ser
 .modal{position:fixed;inset:0;display:grid;place-items:center;z-index:50}
 .modal[hidden]{display:none}
 .modal__backdrop{position:absolute;inset:0;background:rgba(0,0,0,.25)}
-.modal__dialog{position:relative;background:#fff;border:2px solid var(--border);border-radius:12px;width:min(920px, 92vw);max-height:90vh;display:flex;flex-direction:column}
+.modal__dialog{position:relative;background:#fff;border-radius:12px;width:min(920px, 92vw);max-height:90vh;display:flex;flex-direction:column}
 .modal__header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid #e5e7eb}
 .modal__body{padding:14px;overflow:auto}
 
 /* Align modal visuals with app style */
 .modal__header h3{margin:0;font-size:16px;font-weight:800}
-.btn-ghost{background:#f8fafb;border:2px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--text);cursor:pointer}
+.btn-ghost{background:#f8fafb;border-radius:8px;padding:6px 10px;color:var(--text);cursor:pointer}
 .btn-ghost:hover{box-shadow:0 0 0 3px #dff5e4}
 .btn-primary{background:var(--green-600);color:#ffffff;border:none;border-radius:8px;padding:8px 12px;font-weight:800;cursor:pointer}
 .btn-primary:hover{filter:brightness(0.95)}
@@ -250,7 +250,7 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-ser
 .seg-grid{display:grid;grid-template-columns:1.2fr 2fr;gap:18px;margin:10px 0}
 .seg-left .panel__header{gap:10px;align-items:end}
 .seg-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
-.seg-item{border:2px solid var(--border);border-radius:12px;background:#f8fafb;padding:10px;cursor:pointer;display:grid;gap:4px}
+.seg-item{border-radius:12px;background:#f8fafb;padding:10px;cursor:pointer;display:grid;gap:4px}
 .seg-item:hover{box-shadow:0 0 0 3px #dff5e4}
 .seg-item.active{outline:3px solid #c7f5d5}
 .seg-it-row{display:flex;align-items:center;gap:8px}
@@ -291,7 +291,7 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-ser
 .notif-card__time{color:#6b7280;font-size:12px}
 .notif-card__actions{display:flex;gap:8px;margin-top:8px}
 .cfg-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.cfg-item{display:flex;align-items:center;gap:12px;border:2px solid var(--border);border-radius:12px;padding:12px;background:#f8fafb}
+.cfg-item{display:flex;align-items:center;gap:12px;border-radius:12px;padding:12px;background:#f8fafb}
 .cfg-icon{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:#eaf9ee}
 .cfg-text small{color:#6b7280}
 .cfg-spacer{flex:1}
@@ -353,6 +353,15 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-ser
   .soli-grid{grid-template-columns:repeat(2,1fr)}
   .bars{height:180px}
   .donut{width:220px;height:220px}
+  /* Solicitudes toolbar responsive (tablet) */
+  .soli-toolbar{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;align-items:end}
+  .soli-toolbar .spacer{display:none}
+  .soli-toolbar > .btn-primary{grid-column:1 / -1}
+  .soli-toolbar > .btn-ghost{grid-column:1 / -1;justify-self:end}
+  .soli-toolbar .field--inline{flex-direction:column;align-items:stretch;gap:4px}
+  .soli-toolbar .field--inline .select{width:100%}
+  /* Seguimiento: botones y cabeceras más flexibles en tablet */
+  .seg-actions{justify-content:flex-start;flex-wrap:wrap}
 }
 @media (max-width: 640px){
   .layout{grid-template-columns:1fr;height:auto;overflow:visible}
@@ -369,6 +378,29 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-ser
   .bars{height:150px}
   .donut{width:180px;height:180px}
   .push-container{left:12px; right:12px; max-width:unset}
+  /* Solicitudes toolbar responsive (mobile) */
+  .soli-toolbar{grid-template-columns:1fr}
+  .soli-toolbar > .btn-primary{grid-column:1}
+  .soli-toolbar > .btn-ghost{grid-column:1;justify-self:stretch}
+  .soli-toolbar .field--inline .label{min-width:unset}
+  .soli-toolbar .field--inline .select{min-width:0;width:100%}
+  /* Seguimiento: cabecera de lista con búsqueda apilada */
+  .seg-left .panel__header{flex-direction:column;align-items:stretch;gap:8px}
+  .seg-left .panel__header .field--inline{flex-direction:column;align-items:stretch;gap:4px}
+  .seg-left .panel__header .field--inline .label{min-width:unset}
+  .seg-left .panel__header .field--inline .select{min-width:0;width:100%}
+  /* Seguimiento: resumen y fechas apiladas */
+  .seg-summary{flex-direction:column;gap:10px}
+  .seg-dates{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  /* Seguimiento: acciones apiladas y de ancho completo */
+  .seg-actions{flex-direction:column;align-items:stretch;gap:8px;justify-content:flex-start}
+  .seg-actions .btn-primary,
+  .seg-actions .btn-ghost,
+  .seg-actions .btn-danger{width:100%}
+  /* Seguimiento: archivos, evitar desbordes */
+  .files li{flex-wrap:wrap}
+  .file-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .file-size{order:2}
 }
 
 /* Admin > Usuarios */
@@ -380,8 +412,8 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-ser
   font-size: 12px;
   line-height: 18px;
 }
-.badge--ok { background: #e6f6ef; color: #0a8754; border: 1px solid #bde6d4; }
-.badge--warn { background: #fdecea; color: #b3261e; border: 1px solid #f5c2bf; }
+.badge--ok { background: #e6f6ef; color: #0a8754; border: 1px solid var(--border); }
+.badge--warn { background: #fdecea; color: #b3261e; border: 1px solid var(--border); }
 .btn-mini { font-size: 12px; padding: 4px 8px; }
 .rep-table td .btn-mini + .btn-mini { margin-left: 6px; }
 
