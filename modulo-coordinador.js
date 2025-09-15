@@ -137,11 +137,11 @@ document.addEventListener('DOMContentLoaded', () => {
     { id: 'T-1012', titulo: 'Corrección de notas', tipo:'Otro', prioridad:'Urgente', estado:'En revisión', fecha:'2025-09-16', traza:'validacion', custom:[] },
     { id: 'T-1013', titulo: 'Aval de prácticas preprofesionales', tipo:'Otro', prioridad:'Media', estado:'Publicado', fecha:'2025-10-08', traza:'validacion', custom:[] },
     { id: 'T-1014', titulo: 'Solicitud de titulación', tipo:'Otro', prioridad:'Alta', estado:'Borrador', fecha:'2025-11-15', traza:'personalizada', custom:[
-      { name:'Recepción', role:'Secretaría' },
+      { name:'Recepción', role:'Coordinador' },
       { name:'Verificación de requisitos', role:'Coordinador' },
-      { name:'Revisión de tribunal', role:'Docente' },
+      { name:'Revisión final', role:'Coordinador' },
       { name:'Aprobación', role:'Decano' },
-      { name:'Notificación', role:'Estudiante' },
+      { name:'Notificación', role:'Coordinador' },
       { name:'Finalizado', role:'Coordinador' }
     ] },
     { id: 'T-1015', titulo: 'Emisión de carné estudiantil', tipo:'Otro', prioridad:'Baja', estado:'Publicado', fecha:'2025-09-21', traza:'basico', custom:[] },
@@ -221,24 +221,24 @@ document.addEventListener('DOMContentLoaded', () => {
     let steps = [];
     const map = {
       basico: [
-        {name:'Recepción', role:'Secretaría'},
+        {name:'Recepción', role:'Coordinador'},
         {name:'Revisión', role:'Coordinador'},
         {name:'Aprobación', role:'Decano'},
-        {name:'Notificación', role:'Estudiante'},
+        {name:'Notificación', role:'Coordinador'},
         {name:'Finalizado', role:'Coordinador'}
       ],
       validacion: [
-        {name:'Recepción', role:'Secretaría'},
-        {name:'Validación documental', role:'Secretaría'},
+        {name:'Recepción', role:'Coordinador'},
+        {name:'Validación documental', role:'Coordinador'},
         {name:'Revisión coordinación', role:'Coordinador'},
         {name:'Aprobación decanato', role:'Decano'},
         {name:'Finalizado', role:'Coordinador'}
       ],
       homologacion: [
-        {name:'Recepción', role:'Secretaría'},
-        {name:'Evaluación de homologación', role:'Docente'},
+        {name:'Recepción', role:'Coordinador'},
+        {name:'Evaluación de homologación', role:'Coordinador'},
         {name:'Resolución', role:'Decano'},
-        {name:'Notificación', role:'Estudiante'},
+        {name:'Notificación', role:'Coordinador'},
         {name:'Finalizado', role:'Coordinador'}
       ],
     };
@@ -389,24 +389,24 @@ document.addEventListener('DOMContentLoaded', () => {
   // Seed active cases
   const flowMap = {
     basico: [
-      {name:'Recepción', role:'Secretaría'},
+      {name:'Recepción', role:'Coordinador'},
       {name:'Revisión', role:'Coordinador'},
       {name:'Aprobación', role:'Decano'},
-      {name:'Notificación', role:'Estudiante'},
+      {name:'Notificación', role:'Coordinador'},
       {name:'Finalizado', role:'Coordinador'}
     ],
     validacion: [
-      {name:'Recepción', role:'Secretaría'},
-      {name:'Validación documental', role:'Secretaría'},
+      {name:'Recepción', role:'Coordinador'},
+      {name:'Validación documental', role:'Coordinador'},
       {name:'Revisión coordinación', role:'Coordinador'},
       {name:'Aprobación decanato', role:'Decano'},
       {name:'Finalizado', role:'Coordinador'}
     ],
     homologacion: [
-      {name:'Recepción', role:'Secretaría'},
-      {name:'Evaluación de homologación', role:'Docente'},
+      {name:'Recepción', role:'Coordinador'},
+      {name:'Evaluación de homologación', role:'Coordinador'},
       {name:'Resolución', role:'Decano'},
-      {name:'Notificación', role:'Estudiante'},
+      {name:'Notificación', role:'Coordinador'},
       {name:'Finalizado', role:'Coordinador'}
     ],
   };
@@ -565,7 +565,7 @@ document.addEventListener('DOMContentLoaded', () => {
       segFiles.innerHTML = '';
       c.files.forEach(f => {
         const li = document.createElement('li');
-        li.innerHTML = `<span class="file-ico">📎</span><span class="file-name">${f.name}</span><span class="file-size">${f.size}</span><span class="file-actions"><button class="btn-ghost btn-small js-view" type="button">Ver</button><button class="btn-primary btn-small js-dl" type="button">Descargar</button></span>`;
+        li.innerHTML = `<span class="file-ico">📎</span><span class="file-name">${f.name}</span><span class="file-size">${f.size}</span><span class="file-actions"><button id = "btn-ver" class="btn-ghost btn-small js-view" type="button">Ver</button><button class="btn-primary btn-small js-dl" type="button">Descargar</button></span>`;
         li.querySelector('.js-view')?.addEventListener('click', ()=> openFileModal(c.id, f));
         li.querySelector('.js-dl')?.addEventListener('click', ()=> downloadFile(c.id, f));
         segFiles.appendChild(li);

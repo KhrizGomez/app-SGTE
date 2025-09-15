@@ -25,6 +25,7 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-ser
   /* border-right: solid 1px #e5e7eb; */
   border-radius: 18px;
 }
+
 .brand-bar
 {
   display:flex;
@@ -101,18 +102,69 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-ser
 
 /* Stats */
 .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin:18px 0}
-.stat{background:var(--panel);border-radius:18px;padding:12px}
+.stat
+{
+  background:var(--panel);
+  border-radius:18px;
+  padding:20px;
+}
 .stat__icon{font-size:20px}
 .stat__value{font-size:26px;font-weight:800;margin-top:6px}
 .stat__label{font-size:12px;color:#4b5563}
 
 /* Grid three columns layout */
 .grid-3{display:grid;grid-template-columns:2fr 1fr;gap:18px}
-.span-2{grid-column:span 2}
+#rep-kpi-title
+{
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+.span-2
+{
+  grid-column:span 2;
+}
+.span-2 .stat
+{
+  margin-top: 0;
+  background: #f8fafb;
+}
+
+#cont-report
+{
+  margin-top: 20px;
+}
+
+#rep-table
+{
+  margin-bottom: 15px;
+}
+
+#rep-clear
+{
+  background: #000000;
+  color: #ffffff;
+  border-style: none;
+  padding: 10px;
+  border: 1px solid rgb(0, 0, 0, 0.2);
+}
+
+#rep-print
+{
+  border-style: none;
+  padding: 11px;
+  font-weight: 300;
+}
+
+#rep-export
+{
+  border-style: none;
+  padding: 10px;
+  border: 1px solid rgb(0, 0, 0, 0.2);
+}
 
 /* Bars */
 .bars{display:grid;grid-auto-flow:column;align-items:end;gap:10px;height:220px;padding:6px 8px;border-radius:18px;background:#ffffff;}
-.bar{background: #30ac32;;border-radius:6px 6px 0 0}
+.bar{background: #30ac32;border-radius:6px 6px 0 0}
 .bars__labels{display:grid;grid-auto-flow:column;gap:10px;margin-top:6px;color:#000000;font-size:12px;text-align:center}
 
 /* Notif */
@@ -126,7 +178,7 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-ser
 
 /* Quick actions */
 .qa-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
-.qa-item{width:100%;display:flex;gap:10px;align-items:center;border-radius:10px;background:#f8fafb;padding:10px;cursor:pointer;text-align:left}
+.qa-item{width:100%;display:flex;gap:10px;align-items:center;border-radius:10px;background:#f8fafb;padding:10px;cursor:pointer;text-align:left; border-style: none;}
 .qa-ico{width:32px;height:32px;border-radius:8px;background:var(--green-500);color:#083d17;display:grid;place-items:center}
 .qa-text small{color:#6b7280}
 
@@ -176,6 +228,20 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-ser
 .field--inline{display:flex;align-items:center;gap:8px}
 .field--inline .label{min-width:84px}
 .field--inline .select{min-width:180px}
+#co-nuevo
+{
+  padding: 10px;
+  margin-bottom: 2px;
+}
+
+#co-fil-clear
+{
+  padding: 10px;
+  border-style: none;
+  background-color: #000000;
+  color: #ffffff;
+  margin-bottom: 2px;
+}
 
 /* Cards estilo estudiante (reutiliza clases) */
 .soli-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
@@ -210,9 +276,21 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-ser
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .field{display:flex;flex-direction:column;gap:6px}
 .label{font-size:12px;color:#4b5563}
-.select,.textarea{border:2px solid var(--border);border-radius:10px;padding:10px;background:#fff;color:var(--text)}
+.select,.textarea
+{
+  border-radius:10px;
+  padding:10px;
+  background:#fff;
+  color:var(--text);
+  border: 1px solid rgb(0, 0, 0, 0.2);
+}
 .textarea{min-height:80px}
 .form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:8px}
+#btn-ver
+{
+  border: 1px solid rgb(0, 0, 0, 0.2);
+}
+
 
 .field--col-2{grid-column:span 2}
 .traza-grid{display:grid;grid-template-columns:1fr;gap:12px}
@@ -403,7 +481,22 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-ser
   Notificaciones (Coordinador)
   ========================== */
 .notif-list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
-.notif-card{display:grid;grid-template-columns:auto 1fr auto;align-items:flex-start;gap:12px;border:2px solid var(--gold-500);border-radius:12px;padding:12px;background:#fff}
+.notif-card
+{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:flex-start;
+  gap:12px;
+  border: 1px solid rgb(0, 0, 0, 0.2);
+  border-radius:12px;
+  padding:12px;
+  background:#fff;
+}
+
+#co-cfg-reset
+{
+  border: 1px solid rgb(0, 0, 0, 0.2);
+}
 .notif-card__icon{font-size:22px}
 .notif-card__title{font-weight:800}
 .notif-card__desc{font-size:13px;color:#4b5563;margin-top:4px}

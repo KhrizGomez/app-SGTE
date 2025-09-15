@@ -9,6 +9,7 @@
   </head>
   <body>
     <div class="layout">
+      <div class="content-sidebar">
       <aside class="sidebar">
         <div class="brand-bar">
           <img src="recursos/logo.png" alt="UTEQ" />
@@ -38,6 +39,7 @@
           </button>
         </div>
       </aside>
+      </div>
 
       <main class="content">
         <header class="top">
@@ -154,6 +156,35 @@
                 <li><span class="dot dot--cambio"></span> Cambio de carrera</li>
                 <li><span class="dot dot--homol"></span> Homologación</li>
                 <li><span class="dot dot--baja"></span> Baja de matrícula</li>
+              </ul>
+            </article>
+
+            <article class="panel" aria-labelledby="p-fechas">
+              <div class="panel__header">
+                <h2 id="p-fechas">Próximas fechas importantes</h2>
+              </div>
+              <ul class="dates">
+                <li>
+                  <span class="badge">HOY<br/>04 SEP</span>
+                  <div>
+                    <div class="dates__title">Certificado de notas</div>
+                    <div class="dates__desc">Último día para realizar solicitud, no lo olvides.</div>
+                  </div>
+                </li>
+                <li>
+                  <span class="badge">07<br/>SEP</span>
+                  <div>
+                    <div class="dates__title">Solicitudes para beca</div>
+                    <div class="dates__desc">Recuerda que solo puedes hacerlo hasta esta fecha límite.</div>
+                  </div>
+                </li>
+                <li>
+                  <span class="badge">15<br/>SEP</span>
+                  <div>
+                    <div class="dates__title">Anulación de matrícula</div>
+                    <div class="dates__desc">Recuerda que solo puedes hacerlo hasta esta fecha límite.</div>
+                  </div>
+                </li>
               </ul>
             </article>
 
@@ -315,9 +346,6 @@
                     <select id="co-step-role" class="select" aria-label="Rol responsable de la etapa">
                       <option value="Coordinador">Coordinador</option>
                       <option value="Decano">Decano</option>
-                      <option value="Estudiante">Estudiante</option>
-                      <option value="Secretaría">Secretaría</option>
-                      <option value="Docente">Docente</option>
                     </select>
                     <button id="co-step-add" class="btn-primary" type="button">Añadir etapa</button>
                   </div>
@@ -448,7 +476,7 @@
             <ul id="co-notif-list" class="notif-list"></ul>
           </article>
 
-          <article class="panel notif-config" aria-labelledby="co-notif-config-title">
+          <article class="panel notif-config" id="cont-confi" aria-labelledby="co-notif-config-title">
             <div class="panel__header"><h3 id="co-notif-config-title">Preferencias de recepción</h3></div>
             <div class="cfg-grid">
               <label class="cfg-item">
@@ -606,7 +634,7 @@
             </article>
           </section>
 
-          <article class="panel span-2" aria-labelledby="rep-hist-title">
+          <article class="panel span-2" id="rep-hist-title" aria-labelledby="rep-hist-title">
             <div class="panel__header"><h3 id="rep-hist-title">Historial de trámites</h3></div>
             <div class="rep-table-wrap">
               <table class="rep-table" id="rep-table" aria-label="Tabla de historial">

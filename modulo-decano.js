@@ -85,8 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (logoutBtn) logoutBtn.addEventListener('click', ()=> window.location.href = 'index.html');
 
   // Bars chart (dashboard)
-  const data = [9, 11, 19, 22, 7];
-  const labels = ['Copper','Silver','Gold','Platinum','Diamond'];
+  const data = [15, 11, 28, 45, 17, 22, 31, 29, 12];
+  const labels = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre'];
   const bars = document.getElementById('bars');
   const lbls = document.getElementById('bars-labels');
   if (bars && lbls){
@@ -221,24 +221,24 @@ document.addEventListener('DOMContentLoaded', () => {
     let steps = [];
     const map = {
       basico: [
-        {name:'Recepción', role:'Secretaría'},
+        {name:'Recepción', role:'Coordinador'},
         {name:'Revisión', role:'Coordinador'},
         {name:'Aprobación', role:'Decano'},
-        {name:'Notificación', role:'Estudiante'},
+        {name:'Notificación', role:'Coordinador'},
         {name:'Finalizado', role:'Coordinador'}
       ],
       validacion: [
-        {name:'Recepción', role:'Secretaría'},
-        {name:'Validación documental', role:'Secretaría'},
+        {name:'Recepción', role:'Coordinador'},
+        {name:'Validación documental', role:'Coordinador'},
         {name:'Revisión coordinación', role:'Coordinador'},
         {name:'Aprobación decanato', role:'Decano'},
         {name:'Finalizado', role:'Coordinador'}
       ],
       homologacion: [
-        {name:'Recepción', role:'Secretaría'},
-        {name:'Evaluación de homologación', role:'Docente'},
+        {name:'Recepción', role:'Coordinador'},
+        {name:'Evaluación de homologación', role:'Coordinador'},
         {name:'Resolución', role:'Decano'},
-        {name:'Notificación', role:'Estudiante'},
+        {name:'Notificación', role:'Coordinador'},
         {name:'Finalizado', role:'Coordinador'}
       ],
     };
@@ -335,24 +335,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const flowMap = {
     basico: [
-      {name:'Recepción', role:'Secretaría'},
+      {name:'Recepción', role:'Coordinador'},
       {name:'Revisión', role:'Coordinador'},
       {name:'Aprobación', role:'Decano'},
-      {name:'Notificación', role:'Estudiante'},
+      {name:'Notificación', role:'Coordinador'},
       {name:'Finalizado', role:'Coordinador'}
     ],
     validacion: [
-      {name:'Recepción', role:'Secretaría'},
-      {name:'Validación documental', role:'Secretaría'},
+      {name:'Recepción', role:'Coordinador'},
+      {name:'Validación documental', role:'Coordinador'},
       {name:'Revisión coordinación', role:'Coordinador'},
       {name:'Aprobación decanato', role:'Decano'},
       {name:'Finalizado', role:'Coordinador'}
     ],
     homologacion: [
-      {name:'Recepción', role:'Secretaría'},
-      {name:'Evaluación de homologación', role:'Docente'},
+      {name:'Recepción', role:'Coordinador'},
+      {name:'Evaluación de homologación', role:'Coordinador'},
       {name:'Resolución', role:'Decano'},
-      {name:'Notificación', role:'Estudiante'},
+      {name:'Notificación', role:'Coordinador'},
       {name:'Finalizado', role:'Coordinador'}
     ],
   };
