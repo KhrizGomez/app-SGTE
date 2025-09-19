@@ -311,11 +311,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const stCertWrap = document.getElementById('st-cert-wrap');
   const stCertTipo = document.getElementById('st-cert-tipo');
   const stCertSem = document.getElementById('st-cert-sem');
+  const stCertSemWrap = document.getElementById('st-cert-sem-wrap');
   const stObs = document.getElementById('st-obs');
   const stDropzone = document.getElementById('st-dropzone');
   const stFileInput = document.getElementById('st-file-input');
   const stDzList = document.getElementById('st-dz-list');
   const stCancel = document.getElementById('st-cancel');
+  const stReqList = document.getElementById('st-req-list');
+  const stTiempo = document.getElementById('st-tiempo');
 
   let stFilter = '';
   let stTipo = '';
@@ -382,6 +385,73 @@ document.addEventListener('DOMContentLoaded', () => {
   // Abrir modal al seleccionar un trámite
   function openStModal(){ if(stModal) stModal.hidden = false; }
   function closeStModal(){ if(stModal) stModal.hidden = true; }
+  function setReqs(list){ if(!stReqList) return; stReqList.innerHTML = ''; (list||[]).forEach(txt => { const li = document.createElement('li'); li.textContent = txt; stReqList.appendChild(li); }); }
+  function setTiempo(txt){ if(stTiempo) stTiempo.value = txt || '—'; }
+
+  // Definición de requisitos y tiempos estimados por trámite
+  const TRAMITE_META = {
+    'Certificados académicos': {
+      tiempo: '1 - 3 días hábiles',
+      reqs: (subtipo)=>{
+        const base = ['Documento de identidad', 'Comprobante de pago'];
+        if(subtipo === 'Certificado de notas') return [...base, 'Detalle de periodos/semestres a incluir'];
+        if(subtipo === 'Récord académico') return [...base];
+        if(subtipo === 'Constancia de estudios') return [...base];
+        return base;
+      },
+      showSem: (subtipo)=> subtipo === 'Certificado de notas'
+    },
+    'Homologación': {
+      tiempo: '7 - 15 días hábiles',
+      reqs: ['Solicitud de homologación firmada', 'Sílabo(s) o programa(s) oficial(es)', 'Certificado de calificaciones'],
+      showSem: false
+    },
+    'Cambio de carrera': {
+      tiempo: '10 - 20 días hábiles',
+      reqs: ['Carta de solicitud', 'Motivos y plan académico', 'Historial académico'],
+      showSem: false
+    },
+    'Cambio de paralelo': {
+      tiempo: '1 - 5 días hábiles',
+      reqs: ['Carta de solicitud', 'Justificación de horarios/razones'],
+      showSem: false
+    },
+    'Solicitud de beca': {
+      tiempo: '5 - 15 días hábiles',
+      reqs: ['Formulario de beca', 'Soportes económicos', 'Certificado de notas'],
+      showSem: false
+    },
+    'Corrección de notas': {
+      tiempo: '3 - 7 días hábiles',
+      reqs: ['Solicitud de corrección', 'Evidencia del error', 'Aval del docente (si aplica)'],
+      showSem: false
+    },
+    'Validación de sílabo': {
+      tiempo: '3 - 5 días hábiles',
+      reqs: ['Sílabo a validar', 'Referencia de asignatura'],
+      showSem: false
+    },
+    'Reactivación de matrícula': {
+      tiempo: '3 - 7 días hábiles',
+      reqs: ['Solicitud de reingreso', 'Justificativo de suspensión', 'Plan de continuidad'],
+      showSem: false
+    },
+    'Carné estudiantil': {
+      tiempo: '1 - 3 días hábiles',
+      reqs: ['Foto tipo carnet', 'Comprobante de pago'],
+      showSem: false
+    },
+    'Solicitud de titulación': {
+      tiempo: '15 - 30 días hábiles',
+      reqs: ['Plan de titulación', 'Certificado de no adeudar', 'Historial académico'],
+      showSem: false
+    },
+    'Certificado de conducta': {
+      tiempo: '1 - 3 días hábiles',
+      reqs: ['Documento de identidad'],
+      showSem: false
+    }
+  };
   if (sgrid){
     sgrid.addEventListener('click', (e)=>{
       const btn = e.target.closest('.soli-card');
@@ -398,7 +468,15 @@ document.addEventListener('DOMContentLoaded', () => {
       if(isCert){
         stCertTipo.value = 'Seleccione una opción';
         stCertSem.value = 'Seleccione una opción';
+        if(stCertSemWrap) stCertSemWrap.hidden = true; // Mostrar según subtipo elegido
       }
+      // Documentos y tiempo
+      const meta = TRAMITE_META[item.tipo] || TRAMITE_META[item.titulo] || null;
+      if(meta){
+        const reqs = typeof meta.reqs === 'function' ? meta.reqs(stCertTipo?.value) : meta.reqs;
+        setReqs(reqs);
+        setTiempo(meta.tiempo);
+      } else { setReqs([]); setTiempo('—'); }
       // Limpiar adjuntos previos
       if(stDzList) stDzList.innerHTML = '';
       openStModal();
@@ -430,11 +508,33 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // Reaccionar al subtipo de certificado para mostrar/ocultar semestre y refrescar requisitos
+  if(stCertTipo){
+    stCertTipo.addEventListener('change', ()=>{
+      const subtipo = stCertTipo.value;
+      if(stCertSemWrap){ stCertSemWrap.hidden = !TRAMITE_META['Certificados académicos'].showSem(subtipo); }
+      const reqs = TRAMITE_META['Certificados académicos'].reqs(subtipo);
+      setReqs(reqs);
+    });
+  }
+
   if (stForm){
     stForm.addEventListener('submit', (e)=>{
       e.preventDefault();
       const id = stId.value;
       const tramite = stTramite.value;
+      // Validar si se requiere seleccionar subtipo/semestre
+      if(!stCertWrap.hidden){
+        const subtipo = stCertTipo.value;
+        if(subtipo === 'Seleccione una opción'){
+          showStatus('Selecciona el tipo de certificado','warn');
+          return;
+        }
+        if(!stCertSemWrap.hidden && stCertSem.value === 'Seleccione una opción'){
+          showStatus('Selecciona el semestre a incluir','warn');
+          return;
+        }
+      }
   showStatus(`Solicitud enviada: ${tramite} (Ref: ${id})`, 'success');
       closeStModal();
     });

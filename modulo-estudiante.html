@@ -300,7 +300,7 @@
                       </select>
                     </label>
                   </div>
-                  <div class="col">
+                  <div class="col" id="st-cert-sem-wrap">
                     <label class="field">
                       <span class="label">Semestre a incluir</span>
                       <select id="st-cert-sem" class="select">
@@ -311,6 +311,16 @@
                       </select>
                     </label>
                   </div>
+                </div>
+
+                <label class="field field--col-2">
+                  <span class="label">Tiempo estimado</span>
+                  <input id="st-tiempo" class="select" readonly placeholder="—" />
+                </label>
+
+                <div class="field field--col-2">
+                  <span class="label">Documentos requeridos para este trámite</span>
+                  <ul id="st-req-list" class="req-list"></ul>
                 </div>
                 <label class="field field--col-2">
                   <span class="label">Observaciones</span>
