@@ -101,6 +101,106 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Dashboard: Calendar deep-link to trámites con fecha límite
+  // Mapa de fechas destacadas en el calendario -> ID de trámite del catálogo
+  // El calendario visible es de "April 2025" con días resaltados: 10, 14, 16, 20, 24.
+  // Usaremos un mapeo fijo de demo al catálogo existente.
+  const calendarMap = {
+    // día: ID de catálogo
+    '10': 'S-2012', // Certificado de conducta
+    '14': 'S-2002', // Homologación de materias
+    '16': 'S-2003', // Cambio de carrera
+    '20': 'S-2011', // Solicitud de beca
+    '24': 'S-2001', // Certificados académicos
+  };
+
+  function goToSolicitudById(catId){
+    // Cambiar a la vista de Solicitudes
+    const navItem = Array.from(document.querySelectorAll('.nav__item')).find(a=>a.getAttribute('data-key')==='solicitudes');
+    if(navItem){ navItem.click(); }
+    // Esperar a que el grid esté en el DOM y simular click en la tarjeta
+    setTimeout(()=>{
+      const card = document.querySelector(`.soli-card[data-id="${catId}"]`);
+      if(card){
+        card.dispatchEvent(new MouseEvent('click', { bubbles:true }));
+        showStatus('Abriendo trámite desde el calendario…','info');
+      } else {
+        // Si aún no se renderiza, forzar render y reintentar
+        try{ renderStudentCards(); }catch{}
+        const again = document.querySelector(`.soli-card[data-id="${catId}"]`);
+        if(again){
+          again.dispatchEvent(new MouseEvent('click', { bubbles:true }));
+          showStatus('Abriendo trámite desde el calendario…','info');
+        } else {
+          showStatus('No se encontró el trámite asociado.','warn');
+        }
+      }
+    }, 50);
+  }
+
+  // Acciones rápidas (Estudiante)
+  const qa = document.getElementById('st-qa');
+  if (qa){
+    qa.addEventListener('click', (e)=>{
+      const btn = e.target.closest('.qa-item');
+      if(!btn) return;
+      const act = btn.getAttribute('data-act');
+      if(act === 'new'){
+        // Ir a Solicitudes y abrir el primer trámite útil (Certificados académicos)
+        const nav = Array.from(document.querySelectorAll('.nav__item')).find(a=>a.getAttribute('data-key')==='solicitudes');
+        nav?.click();
+        setTimeout(()=>{
+          try{ renderStudentCards(); }catch{}
+          const target = document.querySelector('.soli-card[data-id="S-2001"]') || document.querySelector('.soli-card');
+          if(target){ target.dispatchEvent(new MouseEvent('click', { bubbles:true })); }
+          showStatus('Crea tu nueva solicitud','info');
+        }, 60);
+      } else if (act === 'ai'){
+        const nav = Array.from(document.querySelectorAll('.nav__item')).find(a=>a.getAttribute('data-key')==='asistente');
+        nav?.click();
+        setTimeout(()=>{ document.getElementById('chat-input')?.focus(); }, 30);
+        showStatus('Abriendo asistente IA…', 'info');
+      } else if (act === 'buscar'){
+        const nav = Array.from(document.querySelectorAll('.nav__item')).find(a=>a.getAttribute('data-key')==='seguimiento');
+        nav?.click();
+        setTimeout(()=>{ document.getElementById('seg-texto')?.focus(); }, 30);
+        showStatus('Ir a seguimiento para buscar','info');
+      } else if (act === 'config'){
+        const nav = Array.from(document.querySelectorAll('.nav__item')).find(a=>a.getAttribute('data-key')==='notificaciones');
+        nav?.click();
+        setTimeout(()=>{ document.getElementById('cfg-mail')?.focus(); }, 30);
+        showStatus('Abriendo configuración de notificaciones','info');
+      }
+    });
+  }
+
+  // Vincular clicks a días del calendario
+  const calendar = document.querySelector('#view-dashboard .calendar');
+  if(calendar){
+    calendar.addEventListener('click', (e)=>{
+      const day = e.target.closest('.day');
+      if(!day) return;
+      const val = day.textContent.trim();
+      const id = calendarMap[val];
+      if(id){
+        goToSolicitudById(id);
+      }
+    });
+    // Accesibilidad por teclado
+    calendar.querySelectorAll('.day').forEach(d => {
+      d.setAttribute('tabindex','0');
+      d.setAttribute('role','button');
+      d.addEventListener('keydown', (ev)=>{
+        if(ev.key === 'Enter' || ev.key === ' '){
+          ev.preventDefault();
+          const val = d.textContent.trim();
+          const id = calendarMap[val];
+          if(id) goToSolicitudById(id);
+        }
+      });
+    });
+  }
+
   // Chat básico (demo)
   const chatWindow = document.getElementById('chat-window');
   const chatInput = document.getElementById('chat-input');

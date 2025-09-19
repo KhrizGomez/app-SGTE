@@ -87,6 +87,87 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Dashboard: Calendar deep-link to trámites (Coordinador)
+  // Calendario visible "April 2025" con días destacados 10,14,16,20,24
+  // Mapeo de demo: día -> ID de trámite (rows)
+  const coCalendarMap = {
+    '10': 'T-1007', // Certificado de matrícula
+    '14': 'T-1008', // Convalidación internacional
+    '16': 'T-1012', // Corrección de notas
+    '20': 'T-1010', // Cambio de paralelo
+    '24': 'T-1011', // Certificado de conducta
+  };
+
+  function coGoToTramiteById(tid){
+    // Cambiar a la vista Solicitudes
+    const navItem = Array.from(document.querySelectorAll('.nav__item')).find(a=>a.getAttribute('data-key')==='solicitudes');
+    if(navItem){ navItem.click(); }
+    // Asegurar render y abrir modal de edición del trámite
+    setTimeout(()=>{
+      try{ renderCards(); }catch{}
+      const card = document.querySelector(`.soli-card[data-id="${tid}"]`);
+      const editBtn = card?.querySelector('.js-edit');
+      if(editBtn){
+        editBtn.dispatchEvent(new MouseEvent('click', { bubbles:true }));
+        showStatus('Abriendo trámite desde el calendario…','info');
+      } else {
+        showStatus('No se encontró el trámite asociado.','warn');
+      }
+    }, 60);
+  }
+
+  const coCalendar = document.querySelector('#view-dashboard .calendar');
+  if(coCalendar){
+    coCalendar.addEventListener('click', (e)=>{
+      const day = e.target.closest('.day');
+      if(!day) return;
+      const val = day.textContent.trim();
+      const id = coCalendarMap[val];
+      if(id){ coGoToTramiteById(id); }
+    });
+    // Accesibilidad por teclado
+    coCalendar.querySelectorAll('.day').forEach(d => {
+      d.setAttribute('tabindex','0');
+      d.setAttribute('role','button');
+      d.addEventListener('keydown', (ev)=>{
+        if(ev.key === 'Enter' || ev.key === ' '){
+          ev.preventDefault();
+          const val = d.textContent.trim();
+          const id = coCalendarMap[val];
+          if(id) coGoToTramiteById(id);
+        }
+      });
+    });
+  }
+
+  // Acciones rápidas (Coordinador)
+  const coQa = document.getElementById('co-qa');
+  if (coQa){
+    coQa.addEventListener('click', (e)=>{
+      const btn = e.target.closest('.qa-item');
+      if(!btn) return;
+      const act = btn.getAttribute('data-act');
+      if(act === 'new'){
+        // Ir a Solicitudes y abrir formulario nuevo
+        const nav = Array.from(document.querySelectorAll('.nav__item')).find(a=>a.getAttribute('data-key')==='solicitudes');
+        nav?.click();
+        setTimeout(()=>{ document.getElementById('co-nuevo')?.click(); }, 50);
+      } else if (act === 'buscar'){
+        const nav = Array.from(document.querySelectorAll('.nav__item')).find(a=>a.getAttribute('data-key')==='seguimiento');
+        nav?.click();
+        setTimeout(()=>{ document.getElementById('seg-q')?.focus(); }, 40);
+      } else if (act === 'config'){
+        const nav = Array.from(document.querySelectorAll('.nav__item')).find(a=>a.getAttribute('data-key')==='notificaciones');
+        nav?.click();
+        setTimeout(()=>{ document.getElementById('co-cfg-mail')?.focus(); }, 40);
+      } else if (act === 'reportes'){
+        const nav = Array.from(document.querySelectorAll('.nav__item')).find(a=>a.getAttribute('data-key')==='reportes');
+        nav?.click();
+        setTimeout(()=>{ document.getElementById('rep-q')?.focus(); }, 40);
+      }
+    });
+  }
+
   // Donut: purely CSS via conic-gradient; update center total if needed.
   // If later we need dynamic percentages, we could compute and set style on #donut.
 

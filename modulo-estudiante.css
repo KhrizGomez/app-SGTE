@@ -109,6 +109,8 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-ser
 .stat__label{font-size:12px;color:#4b5563}
 
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+/* Match 3-column dashboard layout used by other modules */
+.grid-3{display:grid;grid-template-columns:2fr 1fr;gap:18px}
 .span-2{grid-column:span 2}
 .panel
 {
@@ -143,6 +145,12 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-ser
   font-size:12px;
   text-align:center;
 }
+
+/* Quick actions */
+.qa-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.qa-item{width:100%;display:flex;gap:10px;align-items:center;border-radius:10px;background:#f8fafb;padding:10px;cursor:pointer;text-align:left; border-style: none;}
+.qa-ico{width:32px;height:32px;border-radius:8px;background:var(--green-500);color:#083d17;display:grid;place-items:center}
+.qa-text small{color:#6b7280}
 
 /* Notif */
 .notif{list-style:none;margin:0;padding:0;display:grid;gap:10px}

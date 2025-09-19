@@ -85,7 +85,7 @@
           </div>
           </section>
 
-          <section class="grid">
+          <section class="grid-3">
           <article class="panel span-2" aria-labelledby="p-env-mes">
             <div class="panel__header">
               <h2 id="p-env-mes">Solicitudes enviadas por mes</h2>
@@ -123,7 +123,40 @@
             </ul>
           </article>
 
-          <article class="panel" aria-labelledby="p-gauge">
+          <!-- Acciones rápidas (Estudiante) -->
+          <article class="panel" aria-labelledby="st-qactions">
+            <div class="panel__header">
+              <h2 id="st-qactions">Acciones rápidas</h2>
+            </div>
+            <ul id="st-qa" class="qa-list">
+              <li>
+                <button class="qa-item" type="button" data-act="new">
+                  <span class="qa-ico">➕</span>
+                  <span class="qa-text"><strong>Nueva solicitud</strong><br/><small>Crea una nueva solicitud</small></span>
+                </button>
+              </li>
+              <li>
+                <button class="qa-item" type="button" data-act="ai">
+                  <span class="qa-ico">🤖</span>
+                  <span class="qa-text"><strong>Ayuda de la IA</strong><br/><small>Resuelve tus dudas</small></span>
+                </button>
+              </li>
+              <li>
+                <button class="qa-item" type="button" data-act="buscar">
+                  <span class="qa-ico">🔍</span>
+                  <span class="qa-text"><strong>Buscar trámite</strong><br/><small>Consulta el estado</small></span>
+                </button>
+              </li>
+              <li>
+                <button class="qa-item" type="button" data-act="config">
+                  <span class="qa-ico">⚙️</span>
+                  <span class="qa-text"><strong>Configuración</strong><br/><small>Preferencias de notificaciones</small></span>
+                </button>
+              </li>
+            </ul>
+          </article>
+
+          <article class="panel span-2" aria-labelledby="p-gauge">
             <div class="panel__header">
               <h2 id="p-gauge">Tiempo estimado por trámite</h2>
             </div>

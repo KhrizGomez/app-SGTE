@@ -102,6 +102,81 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Dashboard: Calendar deep-link to trámites (Decano)
+  const deCalendarMap = {
+    '10': 'T-1002', // Certificados académicos
+    '14': 'T-1003', // Cambio de carrera
+    '16': 'T-1006', // Actualización de datos personales
+    '20': 'T-1005', // Solicitud de beca institucional
+    '24': 'T-1001', // Homologación de materias
+  };
+
+  function deGoToTramiteById(tid){
+    const navItem = Array.from(document.querySelectorAll('.nav__item')).find(a=>a.getAttribute('data-key')==='solicitudes');
+    if(navItem){ navItem.click(); }
+    setTimeout(()=>{
+      try{ renderCards(); }catch{}
+      const card = document.querySelector(`.soli-card[data-id="${tid}"]`);
+      const editBtn = card?.querySelector('.js-edit');
+      if(editBtn){
+        editBtn.dispatchEvent(new MouseEvent('click', { bubbles:true }));
+        showStatus('Abriendo trámite desde el calendario…','info');
+      } else {
+        showStatus('No se encontró el trámite asociado.','warn');
+      }
+    }, 60);
+  }
+
+  const deCalendar = document.querySelector('#view-dashboard .calendar');
+  if(deCalendar){
+    deCalendar.addEventListener('click', (e)=>{
+      const day = e.target.closest('.day');
+      if(!day) return;
+      const val = day.textContent.trim();
+      const id = deCalendarMap[val];
+      if(id){ deGoToTramiteById(id); }
+    });
+    deCalendar.querySelectorAll('.day').forEach(d => {
+      d.setAttribute('tabindex','0');
+      d.setAttribute('role','button');
+      d.addEventListener('keydown', (ev)=>{
+        if(ev.key === 'Enter' || ev.key === ' '){
+          ev.preventDefault();
+          const val = d.textContent.trim();
+          const id = deCalendarMap[val];
+          if(id) deGoToTramiteById(id);
+        }
+      });
+    });
+  }
+
+  // Acciones rápidas (Decano)
+  const deQa = document.getElementById('de-qa');
+  if (deQa){
+    deQa.addEventListener('click', (e)=>{
+      const btn = e.target.closest('.qa-item');
+      if(!btn) return;
+      const act = btn.getAttribute('data-act');
+      if(act === 'new'){
+        const nav = Array.from(document.querySelectorAll('.nav__item')).find(a=>a.getAttribute('data-key')==='solicitudes');
+        nav?.click();
+        setTimeout(()=>{ document.getElementById('co-nuevo')?.click(); }, 50);
+      } else if (act === 'buscar'){
+        const nav = Array.from(document.querySelectorAll('.nav__item')).find(a=>a.getAttribute('data-key')==='seguimiento');
+        nav?.click();
+        setTimeout(()=>{ document.getElementById('seg-q')?.focus(); }, 40);
+      } else if (act === 'config'){
+        const nav = Array.from(document.querySelectorAll('.nav__item')).find(a=>a.getAttribute('data-key')==='notificaciones');
+        nav?.click();
+        setTimeout(()=>{ document.getElementById('co-cfg-mail')?.focus(); }, 40);
+      } else if (act === 'reportes'){
+        const nav = Array.from(document.querySelectorAll('.nav__item')).find(a=>a.getAttribute('data-key')==='reportes');
+        nav?.click();
+        setTimeout(()=>{ document.getElementById('rep-q')?.focus(); }, 40);
+      }
+    });
+  }
+
   // ==========================
   // Solicitudes (Decano)
   // ==========================
