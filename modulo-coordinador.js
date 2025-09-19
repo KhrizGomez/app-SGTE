@@ -168,6 +168,35 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Dashboard: click on notifications → open in Notificaciones modal (Coordinador)
+  const coDashNotif = document.querySelector('#view-dashboard .notif');
+  if (coDashNotif){
+    coDashNotif.addEventListener('click', (e)=>{
+      const item = e.target.closest('.notif__item');
+      if(!item) return;
+      const nav = Array.from(document.querySelectorAll('.nav__item')).find(a=>a.getAttribute('data-key')==='notificaciones');
+      nav?.click();
+      setTimeout(()=>{
+        const rawTitle = item.querySelector('.notif__title')?.textContent || '';
+        const baseTitle = rawTitle.replace('•','').trim();
+        const list = document.getElementById('co-notif-list');
+        let match = null;
+        if(list && baseTitle){
+          match = Array.from(list.querySelectorAll('.notif-card')).find(li => {
+            const t = li.querySelector('.notif-card__title')?.textContent?.replace('•','').trim();
+            return t === baseTitle;
+          });
+        }
+        const primary = match?.querySelector('.js-detail');
+        if(primary){
+          primary.click();
+        } else if (list){
+          list.querySelector('.notif-card .js-detail')?.click();
+        }
+      }, 60);
+    });
+  }
+
   // Donut: purely CSS via conic-gradient; update center total if needed.
   // If later we need dynamic percentages, we could compute and set style on #donut.
 
@@ -849,6 +878,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { id:'N-3006', icon:'📧', title:'Correo devuelto', desc:'No se pudo notificar al estudiante (C-2108).', time:'Esta semana', important:false, read:false },
     { id:'N-3007', icon:'🔔', title:'Revisión asignada', desc:'Nuevo caso asignado a tu bandeja.', time:'Esta semana', important:false, read:false },
     { id:'N-3008', icon:'🚩', title:'Prioridad cambiada a Urgente', desc:'Caso C-2109 actualizado.', time:'Esta semana', important:true, read:false },
+    { id:'N-3009', icon:'📬', title:'Tienes un nuevo mensaje de coordinación', desc:'Revisa los comentarios en tu solicitud.', time:'Hoy', important:false, read:false },
   ];
 
   function loadCoPrefs(){

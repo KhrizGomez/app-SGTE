@@ -101,6 +101,40 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Dashboard: click on notifications → open the exact same item in Notificaciones (no creation)
+  const dashNotif = document.querySelector('#view-dashboard .notif');
+  if (dashNotif){
+    dashNotif.addEventListener('click', (e)=>{
+      const item = e.target.closest('.notif__item');
+      if(!item) return;
+      const title = item.querySelector('.notif__title')?.textContent?.trim() || '';
+      const desc = item.querySelector('.notif__desc')?.textContent?.trim() || '';
+      // Go to Notificaciones view
+      const nav = Array.from(document.querySelectorAll('.nav__item')).find(a=>a.getAttribute('data-key')==='notificaciones');
+      nav?.click();
+      // Ensure we open a matching existing notification; do not create new ones
+      setTimeout(()=>{
+        const list = document.getElementById('notif-list');
+        if(!list){ return; }
+        const cards = Array.from(list.querySelectorAll('.notif-card'));
+        // 1) Match by title + description
+        let match = cards.find(li => {
+          const t = li.querySelector('.notif-card__title')?.textContent?.trim() || '';
+          const d = li.querySelector('.notif-card__desc')?.textContent?.trim() || '';
+          return t === title && d === desc;
+        });
+        // 2) Fallback: match by title only
+        if(!match && title){
+          match = cards.find(li => (li.querySelector('.notif-card__title')?.textContent?.trim() || '') === title);
+        }
+        // 3) Last fallback: open the first card
+        if(!match){ match = cards[0] || null; }
+        const primary = match?.querySelector('.pill--primary');
+        if(primary){ primary.click(); }
+      }, 60);
+    });
+  }
+
   // Dashboard: Calendar deep-link to trámites con fecha límite
   // Mapa de fechas destacadas en el calendario -> ID de trámite del catálogo
   // El calendario visible es de "April 2025" con días resaltados: 10, 14, 16, 20, 24.

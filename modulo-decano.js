@@ -177,6 +177,35 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Dashboard: click on notifications → open in Notificaciones modal (Decano)
+  const deDashNotif = document.querySelector('#view-dashboard .notif');
+  if (deDashNotif){
+    deDashNotif.addEventListener('click', (e)=>{
+      const item = e.target.closest('.notif__item');
+      if(!item) return;
+      const nav = Array.from(document.querySelectorAll('.nav__item')).find(a=>a.getAttribute('data-key')==='notificaciones');
+      nav?.click();
+      setTimeout(()=>{
+        const rawTitle = item.querySelector('.notif__title')?.textContent || '';
+        const baseTitle = rawTitle.replace('•','').trim();
+        const list = document.getElementById('co-notif-list');
+        let match = null;
+        if(list && baseTitle){
+          match = Array.from(list.querySelectorAll('.notif-card')).find(li => {
+            const t = li.querySelector('.notif-card__title')?.textContent?.replace('•','').trim();
+            return t === baseTitle;
+          });
+        }
+        const primary = match?.querySelector('.js-detail');
+        if(primary){
+          primary.click();
+        } else if (list){
+          list.querySelector('.notif-card .js-detail')?.click();
+        }
+      }, 60);
+    });
+  }
+
   // ==========================
   // Solicitudes (Decano)
   // ==========================
@@ -659,6 +688,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { id:'N-3002', icon:'🔁', title:'Recordatorio de etapa pendiente', desc:'Caso C-2101 lleva 2 días en la misma etapa.', time:'Hace 1 hora', important:false, read:false },
     { id:'N-3003', icon:'📥', title:'Nueva solicitud recibida', desc:'Caso C-2110 creado por Secretaría.', time:'Hoy 09:10', important:false, read:false },
     { id:'N-3004', icon:'🗓', title:'Vence plazo de revisión', desc:'Caso C-2105 vence mañana.', time:'Ayer 18:30', important:true, read:true },
+    { id:'N-3009', icon:'📬', title:'Tienes un nuevo mensaje de coordinación', desc:'Revisa los comentarios en tu solicitud.', time:'Hoy', important:false, read:false },
   ];
 
   function loadCoPrefs(){
