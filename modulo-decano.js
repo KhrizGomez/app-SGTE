@@ -102,6 +102,58 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Sparkline weekly trend (additional chart)
+  const sparkHost = document.getElementById('sparkline');
+  const sparkLegend = document.getElementById('spark-legend');
+  if (sparkHost){
+    const w = sparkHost.clientWidth || 280;
+    const hostH = sparkHost.clientHeight || 180;
+    const h = Math.max(300, hostH);
+    const pad = 6;
+    const sData = [10, 12, 11, 15, 18, 20, 17];
+    const max = Math.max(...sData);
+    const min = Math.min(...sData);
+    const stepX = (w - pad*2) / (sData.length - 1);
+    const y = (v)=> h - pad - ((v - min) / (max - min || 1)) * (h - pad*2);
+    const points = sData.map((v,i)=> [pad + i*stepX, y(v)]);
+    const pathD = points.map((p,i)=> (i? 'L':'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
+    const areaD = `M ${points[0][0].toFixed(1)} ${h-pad} ` +
+      points.map(p=> `L ${p[0].toFixed(1)} ${p[1].toFixed(1)}`).join(' ') +
+      ` L ${points[points.length-1][0].toFixed(1)} ${h-pad} Z`;
+    const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    svg.setAttribute('width', '100%');
+  svg.setAttribute('height', h.toString());
+    const area = document.createElementNS('http://www.w3.org/2000/svg','path');
+    area.setAttribute('d', areaD);
+    area.setAttribute('fill', 'rgba(48,172,50,0.12)');
+    area.setAttribute('stroke', 'none');
+    svg.appendChild(area);
+    const line = document.createElementNS('http://www.w3.org/2000/svg','path');
+    line.setAttribute('d', pathD);
+    line.setAttribute('fill', 'none');
+    line.setAttribute('stroke', '#30ac32');
+    line.setAttribute('stroke-width', '2');
+    svg.appendChild(line);
+    const addDot = (pt, color)=>{
+      const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      c.setAttribute('cx', pt[0].toFixed(1));
+      c.setAttribute('cy', pt[1].toFixed(1));
+      c.setAttribute('r', '3');
+      c.setAttribute('fill', color);
+      c.setAttribute('stroke', '#fff');
+      c.setAttribute('stroke-width', '1');
+      svg.appendChild(c);
+    };
+    addDot(points[sData.indexOf(max)], '#15803d');
+    addDot(points[sData.indexOf(min)], '#ef4444');
+    sparkHost.innerHTML = '';
+    sparkHost.appendChild(svg);
+    if(sparkLegend){
+      sparkLegend.textContent = `Semana actual: min ${min}, max ${max}, total ${sData.reduce((a,b)=>a+b,0)}`;
+    }
+  }
+
   // Dashboard: Calendar deep-link to trámites (Decano)
   const deCalendarMap = {
     '10': 'T-1002', // Certificados académicos
@@ -226,7 +278,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const fldTipo = document.getElementById('co-tipo');
   const fldPrioridad = document.getElementById('co-prioridad');
   const fldEstado = document.getElementById('co-estado');
-  const fldResp = document.getElementById('co-responsable');
+  // Responsable se asigna automáticamente por usuario/rol (no hay campo visual)
+  const fldResp = null;
   const fldFecha = document.getElementById('co-fecha');
   const fldDesc = document.getElementById('co-desc');
   const selTraza = document.getElementById('co-traza');
@@ -255,12 +308,23 @@ document.addEventListener('DOMContentLoaded', () => {
   let fPrio = '';
   let fEstado = '';
 
+  // Mapea tipos específicos a las nuevas categorías de alto nivel
+  function mapToCategoria(tipo){
+    const t = (tipo||'').toLowerCase();
+    if(/certificado|constancia|carn[eé]|documento|actualizaci[oó]n de datos/.test(t)) return 'Certificación y Documentos';
+    if(/titulaci[oó]n|graduaci[oó]n/.test(t)) return 'Titulación y Graduación';
+    if(/beca|ayuda|financ|pago|arancel|matr[ií]cula.*(pago|valor)/.test(t)) return 'Financieros y de Beneficios';
+    if(/cambio de paralelo|carga horaria|materia|asignatura|homologaci[oó]n|convalidaci[oó]n/.test(t)) return 'Académicos y de Carga Horaria';
+    if(/carrera|reactivaci[oó]n|baja de matr[ií]cula|anulaci[oó]n|traslado/.test(t)) return 'Admisión y Matrícula';
+    return tipo || '';
+  }
+
   function renderCards(){
     if(!grid) return;
     grid.innerHTML = '';
-    rows.filter(r => {
+  rows.filter(r => {
         const textOk = !filter || JSON.stringify(r).toLowerCase().includes(filter);
-        const tipoOk = !fTipo || r.tipo === fTipo;
+    const tipoOk = !fTipo || r.tipo === fTipo || mapToCategoria(r.tipo) === fTipo;
         const prioOk = !fPrio || r.prioridad === fPrio;
         const estOk = !fEstado || r.estado === fEstado;
         return textOk && tipoOk && prioOk && estOk;
@@ -290,7 +354,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fldTipo.value = row?.tipo || '';
     fldPrioridad.value = row?.prioridad || 'Baja';
     fldEstado.value = row?.estado || 'Borrador';
-    fldResp.value = row?.responsable || '';
+  // responsable visual removido; se determina por usuario activo
     fldFecha.value = row?.fecha || '';
     fldDesc.value = row?.desc || '';
     selTraza.value = row?.traza || 'basico';
@@ -302,13 +366,19 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function getForm(){
+    const currentUser = (function(){
+      const name = document.querySelector('.user__name')?.textContent?.trim() || '—';
+      const role = document.querySelector('.user__role')?.textContent?.trim() || 'Decano';
+      return { name, role };
+    })();
     return {
       id: fldId.value || `T-${Math.floor(Math.random()*9000)+1000}`,
       titulo: fldTitulo.value.trim(),
       tipo: fldTipo.value,
       prioridad: fldPrioridad.value,
       estado: fldEstado.value,
-      responsable: fldResp.value.trim(),
+      responsable: currentUser.name,
+      responsableRol: currentUser.role,
       fecha: fldFecha.value,
       desc: fldDesc.value.trim(),
       traza: selTraza.value,

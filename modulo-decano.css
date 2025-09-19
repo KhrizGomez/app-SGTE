@@ -87,7 +87,7 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-ser
 
 /* Stats */
 .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin:18px 0}
-.stat{background:var(--panel);border-radius:12px;padding:12px}
+.stat{background:#f8fafb;border-radius:12px;padding:20px}
 .stat__icon{font-size:20px}
 .stat__value{font-size:26px;font-weight:800;margin-top:6px}
 .stat__label{font-size:12px;color:#4b5563}
@@ -109,12 +109,14 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-ser
 .notif .ico{font-size:18px}
 .notif__title{font-weight:700;font-size:13px}
 .notif__desc{font-size:12px;color:#4b5563}
+.notif__item:hover{background:var(--sand-50)}
 
 /* Quick actions */
 .qa-list{list-style:none;margin:0;padding:0;display:grid;gap:10px;}
 .qa-item{width:100%;display:flex;gap:10px;align-items:center;border-radius:10px;background:#f8fafb;padding:10px;cursor:pointer;text-align:left; border-style: none;}
 .qa-ico{width:32px;height:32px;border-radius:8px;background:var(--green-500);color:#083d17;display:grid;place-items:center}
 .qa-text small{color:#6b7280}
+.qa-item:hover{background:var(--sand-50)}
 
 /* Donut */
 .donut-wrap{position:relative;display:grid;place-items:center}
@@ -125,12 +127,17 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-ser
 .donut-center{position:absolute;display:grid;place-items:center;text-align:center}
 .donut-num{font-weight:800;font-size:26px}
 .donut-sub{color:#6b7280;font-size:12px}
-.legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;padding-left:0;list-style:none}
-.legend .dot{width:12px;height:12px;border-radius:50%;display:inline-block;margin-right:6px}
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:25px;padding-left:0;list-style:none; font-size: 14px;}
+.legend .dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:2px}
 .dot--cert{background:#3b82f6}
 .dot--cambio{background:var(--green-600)}
 .dot--homol{background:#f59e0b}
 .dot--baja{background:#ef4444}
+
+/* Sparkline */
+.spark{background:#f8fafb;border-radius:10px;padding:10px;min-height:180px;display:flex;flex-direction:column}
+.sparkline{width:100%;height:100%;flex:1}
+.spark-legend{margin-top:6px;color:#6b7280;font-size:12px}
 
 /* Dates / Calendar (reuse from student) */
 .dates{list-style:none;margin:0;padding:0;display:grid;gap:12px}
@@ -263,6 +270,13 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-ser
 .steps-list li .role{margin-left:auto}
 .steps-list li .role .role-badge{border-color:#c7f5d5}
 
+#cont-dos{margin-top: 18px;}
+#cont-tres{margin-top: 18px;}
+#cont-cuatro{margin-top: 18px;}
+#cont-quinto{margin-top: 18px;}
+#cont-sexto{margin-top: 18px;}
+#cont-septimo{margin-top: 18px;}
+
 @media (max-width:1200px){
   .stats{grid-template-columns:repeat(3,1fr)}
   .grid-3{grid-template-columns:1fr}
@@ -320,7 +334,7 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-ser
   Notificaciones (Coordinador)
   ========================== */
 .notif-list{list-style:none;margin:0;padding:0;display:grid;gap:12px;}
-.notif-card{display:grid;grid-template-columns:auto 1fr auto;align-items:flex-start;gap:12px;border-radius:12px;padding:12px;background:#fff}
+.notif-card{display:grid;grid-template-columns:auto 1fr auto;align-items:flex-start;gap:12px;border-radius:12px;padding:12px;background:#fff; border: 1px solid rgb(0, 0, 0, 0.2);}
 .notif-card__icon{font-size:22px}
 .notif-card__title{font-weight:800}
 .notif-card__desc{font-size:13px;color:#4b5563;margin-top:4px}

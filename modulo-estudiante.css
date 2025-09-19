@@ -149,6 +149,7 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-ser
 /* Quick actions */
 .qa-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
 .qa-item{width:100%;display:flex;gap:10px;align-items:center;border-radius:10px;background:#f8fafb;padding:10px;cursor:pointer;text-align:left; border-style: none;}
+.qa-item:hover{background:var(--sand-50)}
 .qa-ico{width:32px;height:32px;border-radius:8px;background:var(--green-500);color:#083d17;display:grid;place-items:center}
 .qa-text small{color:#6b7280}
 
@@ -158,6 +159,7 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-ser
 .notif .ico{font-size:18px}
 .notif__title{font-weight:700;font-size:13px}
 .notif__desc{font-size:12px;color:#4b5563}
+.notif__item:hover{background:var(--sand-50)}
 
 /* Gauge */
 .gauge{position:relative;height:180px;background:#f8fafb;border-radius:10px;display:flex;align-items:center;justify-content:center}

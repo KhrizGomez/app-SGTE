@@ -139,7 +139,18 @@
               </ul>
             </article>
 
-            <article class="panel span-2" aria-labelledby="p-donut">
+            <!-- Nuevo gráfico adicional: Sparkline semanal -->
+            <article class="panel" aria-labelledby="p-spark">
+              <div class="panel__header">
+                <h2 id="p-spark">Tendencia semanal de solicitudes</h2>
+              </div>
+              <div class="spark" id="spark">
+                <div id="sparkline" class="sparkline" role="img" aria-label="Tendencia semanal"></div>
+                <div id="spark-legend" class="spark-legend" aria-hidden="true"></div>
+              </div>
+            </article>
+
+            <article class="panel" aria-labelledby="p-donut">
               <div class="panel__header">
                 <h2 id="p-donut">Trámites más solicitados este mes</h2>
               </div>
@@ -223,11 +234,11 @@
               <span class="label">Tipo</span>
               <select id="co-fil-tipo" class="select">
                 <option value="">Todos</option>
-                <option>Certificados académicos</option>
-                <option>Cambio de carrera</option>
-                <option>Homologación</option>
-                <option>Baja de matrícula</option>
-                <option>Otro</option>
+                <option>Admisión y Matrícula</option>
+                <option>Académicos y de Carga Horaria</option>
+                <option>Certificación y Documentos</option>
+                <option>Titulación y Graduación</option>
+                <option>Financieros y de Beneficios</option>
               </select>
             </label>
             <label class="field field--inline">
@@ -281,14 +292,14 @@
                   <input id="co-titulo" class="select" placeholder="Ej. Homologación de materias" required />
                 </label>
                 <label class="field">
-                  <span class="label">Tipo de trámite</span>
+                  <span class="label">Categoría de trámite</span>
                   <select id="co-tipo" class="select" required>
                     <option value="">Seleccione una opción</option>
-                    <option>Certificados académicos</option>
-                    <option>Cambio de carrera</option>
-                    <option>Homologación</option>
-                    <option>Baja de matrícula</option>
-                    <option>Otro</option>
+                    <option>Admisión y Matrícula</option>
+                    <option>Académicos y de Carga Horaria</option>
+                    <option>Certificación y Documentos</option>
+                    <option>Titulación y Graduación</option>
+                    <option>Financieros y de Beneficios</option>
                   </select>
                 </label>
                 <label class="field">
@@ -309,10 +320,7 @@
                     <option>Finalizado</option>
                   </select>
                 </label>
-                <label class="field">
-                  <span class="label">Responsable</span>
-                  <input id="co-responsable" class="select" placeholder="Nombre del responsable" />
-                </label>
+                
                 <label class="field">
                   <span class="label">Fecha límite</span>
                   <input id="co-fecha" class="select" type="date" />

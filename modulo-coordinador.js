@@ -87,6 +87,63 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Sparkline weekly trend (additional chart)
+  const sparkHost = document.getElementById('sparkline');
+  const sparkLegend = document.getElementById('spark-legend');
+  if (sparkHost){
+    const w = sparkHost.clientWidth || 280;
+    const hostH = sparkHost.clientHeight || 180;
+    const h = Math.max(300, hostH);
+    const pad = 6;
+    // Example weekly data (Mon..Sun)
+    const sData = [12, 9, 14, 18, 16, 22, 19];
+    const max = Math.max(...sData);
+    const min = Math.min(...sData);
+    const stepX = (w - pad*2) / (sData.length - 1);
+    const y = (v)=> h - pad - ((v - min) / (max - min || 1)) * (h - pad*2);
+    const points = sData.map((v,i)=> [pad + i*stepX, y(v)]);
+    const pathD = points.map((p,i)=> (i? 'L':'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
+    // Area path
+    const areaD = `M ${points[0][0].toFixed(1)} ${h-pad} ` +
+      points.map(p=> `L ${p[0].toFixed(1)} ${p[1].toFixed(1)}`).join(' ') +
+      ` L ${points[points.length-1][0].toFixed(1)} ${h-pad} Z`;
+    const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    svg.setAttribute('width', '100%');
+  svg.setAttribute('height', h.toString());
+    // area fill
+    const area = document.createElementNS('http://www.w3.org/2000/svg','path');
+    area.setAttribute('d', areaD);
+    area.setAttribute('fill', 'rgba(48,172,50,0.12)');
+    area.setAttribute('stroke', 'none');
+    svg.appendChild(area);
+    // line stroke
+    const line = document.createElementNS('http://www.w3.org/2000/svg','path');
+    line.setAttribute('d', pathD);
+    line.setAttribute('fill', 'none');
+    line.setAttribute('stroke', '#30ac32');
+    line.setAttribute('stroke-width', '2');
+    svg.appendChild(line);
+    // min/max markers
+    const addDot = (pt, color)=>{
+      const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      c.setAttribute('cx', pt[0].toFixed(1));
+      c.setAttribute('cy', pt[1].toFixed(1));
+      c.setAttribute('r', '3');
+      c.setAttribute('fill', color);
+      c.setAttribute('stroke', '#fff');
+      c.setAttribute('stroke-width', '1');
+      svg.appendChild(c);
+    };
+    addDot(points[sData.indexOf(max)], '#15803d');
+    addDot(points[sData.indexOf(min)], '#ef4444');
+    sparkHost.innerHTML = '';
+    sparkHost.appendChild(svg);
+    if(sparkLegend){
+      sparkLegend.textContent = `Semana actual: min ${min}, max ${max}, total ${sData.reduce((a,b)=>a+b,0)}`;
+    }
+  }
+
   // Dashboard: Calendar deep-link to trámites (Coordinador)
   // Calendario visible "April 2025" con días destacados 10,14,16,20,24
   // Mapeo de demo: día -> ID de trámite (rows)
@@ -220,9 +277,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const fldTipo = document.getElementById('co-tipo');
   const fldPrioridad = document.getElementById('co-prioridad');
   const fldEstado = document.getElementById('co-estado');
-  const fldResp = document.getElementById('co-responsable');
   const fldFecha = document.getElementById('co-fecha');
   const fldDesc = document.getElementById('co-desc');
+  // Helper: current user info from sidebar
+  function getCurrentUser(){
+    const name = document.querySelector('.user .user__name')?.textContent?.trim() || 'Coordinador/a';
+    const role = document.querySelector('.user .user__role')?.textContent?.trim() || 'Coordinador';
+    return { name, role };
+  }
   const selTraza = document.getElementById('co-traza');
   const tl = document.getElementById('co-tl');
   const customWrap = document.getElementById('co-custom');
@@ -296,7 +358,6 @@ document.addEventListener('DOMContentLoaded', () => {
     fldTipo.value = row?.tipo || '';
     fldPrioridad.value = row?.prioridad || 'Baja';
     fldEstado.value = row?.estado || 'Borrador';
-    fldResp.value = row?.responsable || '';
     fldFecha.value = row?.fecha || '';
     fldDesc.value = row?.desc || '';
     selTraza.value = row?.traza || 'basico';
@@ -308,13 +369,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function getForm(){
+    const { name: respName, role: respRole } = getCurrentUser();
     return {
       id: fldId.value || `T-${Math.floor(Math.random()*9000)+1000}`,
       titulo: fldTitulo.value.trim(),
       tipo: fldTipo.value,
       prioridad: fldPrioridad.value,
       estado: fldEstado.value,
-      responsable: fldResp.value.trim(),
+      responsable: respName,
+      responsableRol: respRole,
       fecha: fldFecha.value,
       desc: fldDesc.value.trim(),
       traza: selTraza.value,
