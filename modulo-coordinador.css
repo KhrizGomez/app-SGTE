@@ -139,28 +139,12 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-ser
   margin-bottom: 15px;
 }
 
-#rep-clear
-{
-  background: #000000;
-  color: #ffffff;
-  border-style: none;
-  padding: 10px;
-  border: 1px solid rgb(0, 0, 0, 0.2);
-}
+/* Normalize special action buttons to use shared sizes */
+#rep-clear{ background:#000; color:#fff; border:1px solid rgba(0,0,0,.2); padding:8px 12px; border-radius:8px }
 
-#rep-print
-{
-  border-style: none;
-  padding: 11px;
-  font-weight: 300;
-}
+#rep-print{ border:1px solid rgba(0,0,0,.2); padding:8px 12px; border-radius:8px; font-weight:600; background:#fff }
 
-#rep-export
-{
-  border-style: none;
-  padding: 10px;
-  border: 1px solid rgb(0, 0, 0, 0.2);
-}
+#rep-export{ border:1px solid rgba(0,0,0,.2); padding:8px 12px; border-radius:8px; background:#fff }
 
 /* Bars */
 .bars{display:grid;grid-auto-flow:column;align-items:end;gap:10px;height:220px;padding:6px 8px;border-radius:18px;background:#ffffff;}
@@ -235,20 +219,9 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-ser
 .field--inline{display:flex;align-items:center;gap:8px}
 .field--inline .label{min-width:84px}
 .field--inline .select{min-width:180px}
-#co-nuevo
-{
-  padding: 10px;
-  margin-bottom: 2px;
-}
+#co-nuevo{ padding:8px 12px; margin-bottom:2px }
 
-#co-fil-clear
-{
-  padding: 10px;
-  border-style: none;
-  background-color: #000000;
-  color: #ffffff;
-  margin-bottom: 2px;
-}
+#co-fil-clear{ padding:8px 12px; background:#000; color:#fff; border:1px solid rgba(0,0,0,.2); border-radius:8px; margin-bottom:2px }
 
 /* Cards estilo estudiante (reutiliza clases) */
 .soli-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}

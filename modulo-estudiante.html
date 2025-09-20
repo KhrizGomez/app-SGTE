@@ -289,7 +289,7 @@
                   <input id="st-tramite" class="select" readonly />
                 </label>
                 <div id="st-cert-wrap" class="field field--col-2" hidden>
-                  <div class="col">
+                  <div id="st-cert-tipo-wrap" class="col">
                     <label class="field">
                       <span class="label">Tipo de certificado</span>
                       <select id="st-cert-tipo" class="select">
@@ -300,33 +300,22 @@
                       </select>
                     </label>
                   </div>
-                  <div class="col" id="st-cert-sem-wrap">
-                    <label class="field">
-                      <span class="label">Semestre a incluir</span>
-                      <select id="st-cert-sem" class="select">
-                        <option selected>Seleccione una opción</option>
-                        <option>2025-1</option>
-                        <option>2024-2</option>
-                        <option>2024-1</option>
-                      </select>
-                    </label>
-                  </div>
                 </div>
-
-                <label class="field field--col-2">
-                  <span class="label">Tiempo estimado</span>
-                  <input id="st-tiempo" class="select" readonly placeholder="—" />
-                </label>
-
+                <!-- Campos adicionales (dependen del trámite) -->
+                <div id="st-extra" class="extra-grid field--col-2"></div>
                 <div class="field field--col-2">
-                  <span class="label">Documentos requeridos para este trámite</span>
-                  <ul id="st-req-list" class="req-list"></ul>
+                  <span class="label">Tiempo estimado (ETA)</span>
+                  <input id="st-eta" class="select" readonly placeholder="—" />
                 </div>
-                <label class="field field--col-2">
+                <div class="field field--col-2">
+                  <span class="label">Requisitos del trámite</span>
+                  <ul id="st-reqs" class="files" aria-label="Requisitos previos"></ul>
+                </div>
+                <label id="st-obs-wrap" class="field field--col-2">
                   <span class="label">Observaciones</span>
                   <textarea id="st-obs" class="textarea" placeholder="Descripción"></textarea>
                 </label>
-                <div class="field field--col-2">
+                <div id="st-attach-wrap" class="field field--col-2">
                   <span class="label">Adjuntar documentos</span>
                   <div id="st-dropzone" class="dropzone" tabindex="0" role="button" aria-label="Arrastra o selecciona archivos">
                     <div class="dz-ico">📄</div>
@@ -344,70 +333,52 @@
           </div>
         </div>
 
-        <!-- Vista: Seguimiento (Estudiante) -->
+        <!-- Vista: Seguimiento (Estudiante) - estilo Coordinador sin acciones de aprobación/rechazo -->
         <section id="view-seguimiento" class="view" hidden>
-          <!-- <h2 class="view__title">Seguimiento de trámites</h2> -->
-
-          <article class="panel seg-search" aria-labelledby="seg-search-title">
-            <div class="panel__header">
-              <h3 id="seg-search-title">Buscar solicitud</h3>
-            </div>
-            <div class="seg-search__grid">
-              <label class="field">
-                <span class="label">Buscar por:</span>
-                <select class="select" id="seg-criterio">
-                  <option>Número de solicitud</option>
-                  <option>Tipo de trámite</option>
-                  <option>Estado</option>
-                </select>
-              </label>
-              <label class="field">
-                <span class="label">Observaciones</span>
-                <input class="select" id="seg-texto" placeholder="Descripción" />
-              </label>
-              <div class="field field--action">
-                <button id="seg-buscar" class="btn-primary" type="button">🔍 Buscar</button>
+          <div class="seg-grid">
+            <article class="panel seg-left" aria-labelledby="seg-list-title">
+              <div class="panel__header">
+                <h3 id="seg-list-title">Trámites vigentes</h3>
+                <label class="field field--inline">
+                  <span class="label">Buscar</span>
+                  <input id="seg-q" class="select" placeholder="#ID, título, estado…" />
+                </label>
               </div>
-            </div>
-          </article>
+              <ul id="seg-list" class="seg-list" aria-label="Lista de trámites"></ul>
+            </article>
 
-          <article class="panel seg-tl" aria-labelledby="seg-tl-title">
-            <div class="panel__header"><h3 id="seg-tl-title">Solicitud para la homologación de materias: <span id="seg-id">#1251238554</span></h3></div>
-            <ol class="timeline" id="timeline">
-              <li class="tl-item done">
-                <div class="tl-dot">✔</div>
-                <div class="tl-body">
-                  <div class="tl-title">Solicitud recibida</div>
-                  <div class="tl-meta">25 de mayo, 2025 · 10:00 AM</div>
-                  <div class="tl-desc">Su solicitud de homologación ha sido recibida y está pendiente su revisión por la secretaría académica.</div>
+            <article class="panel seg-right" aria-labelledby="seg-det-title">
+              <div class="panel__header">
+                <h3 id="seg-det-title">Detalle del trámite</h3>
+                <span id="seg-det-id" class="seg-id"></span>
+              </div>
+
+              <div id="seg-empty" class="seg-empty">Selecciona un trámite de la lista para ver detalles.</div>
+
+              <div id="seg-detail" class="seg-detail" hidden>
+                <div class="seg-summary">
+                  <div>
+                    <div class="seg-title" id="seg-title">—</div>
+                    <div class="seg-meta"><span id="seg-tipo">—</span> · <span id="seg-prio">—</span> · <span id="seg-estado">—</span></div>
+                  </div>
+                  <div class="seg-dates">
+                    <div><small>Creado</small><div id="seg-creado">—</div></div>
+                    <div><small>Actualizado</small><div id="seg-actual">—</div></div>
+                  </div>
                 </div>
-              </li>
-              <li class="tl-item done">
-                <div class="tl-dot">✔</div>
-                <div class="tl-body">
-                  <div class="tl-title">Revisión de documentos</div>
-                  <div class="tl-meta">26 de mayo, 2025 · 2:30 PM</div>
-                  <div class="tl-desc">La documentación fue revisada y validada por secretaría.</div>
+
+                <div class="seg-section">
+                  <h4 class="seg-h4">Archivos adjuntos</h4>
+                  <ul id="seg-files" class="files"></ul>
                 </div>
-              </li>
-              <li class="tl-item current">
-                <div class="tl-dot">⌛</div>
-                <div class="tl-body">
-                  <div class="tl-title">Enviado a coordinación de carrera</div>
-                  <div class="tl-meta">27 de mayo, 2025 · 11:25 AM</div>
-                  <div class="tl-desc">El documento se encuentra en análisis por parte de coordinación de carrera para emitir el dictamen académico.</div>
+
+                <div class="seg-section">
+                  <h4 class="seg-h4">Trazabilidad</h4>
+                  <ol id="seg-tl" class="timeline"></ol>
                 </div>
-              </li>
-              <li class="tl-item pending">
-                <div class="tl-dot">•</div>
-                <div class="tl-body">
-                  <div class="tl-title">Resolución final</div>
-                  <div class="tl-meta">Pendiente</div>
-                  <div class="tl-desc">La solicitud está a espera de la resolución por parte de coordinación.</div>
-                </div>
-              </li>
-            </ol>
-          </article>
+              </div>
+            </article>
+          </div>
         </section>
 
         <!-- Vista: Asistente IA (Estudiante) -->
@@ -543,6 +514,26 @@
           </article>
         </section>
       </main>
+    </div>
+
+    <!-- Modal: Vista previa de archivo (Estudiante) -->
+    <div id="st-file-modal" class="modal" hidden>
+      <div class="modal__backdrop" data-close="1"></div>
+      <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="st-file-modal-title">
+        <div class="modal__header">
+          <h3 id="st-file-modal-title">Vista previa</h3>
+          <button id="st-file-close" class="btn-ghost" type="button">✕</button>
+        </div>
+        <div class="modal__body">
+          <div id="st-file-meta" style="margin-bottom:8px;color:#6b7280;font-size:12px"></div>
+          <div id="st-file-preview" style="height:360px;display:grid;place-items:center;background:#f8fafb;border:1px solid #e5e7eb;border-radius:10px;color:#6b7280">
+            No hay vista previa disponible para este archivo.
+          </div>
+          <div class="form-actions" style="margin-top:10px">
+            <button id="st-file-dl" class="btn-primary" type="button">Descargar</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Modal detalle de notificación (Estudiante) -->

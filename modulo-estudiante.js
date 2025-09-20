@@ -75,11 +75,140 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function showStatus(msg, kind='info', ms=2600){ push(msg, kind, ms); }
 
-  // Buscador (demo) en Seguimiento
-  const btnBuscar = document.getElementById('seg-buscar');
-  if(btnBuscar){
-    btnBuscar.addEventListener('click', () => {
-      showStatus('Búsqueda ejecutada (demo)', 'info');
+  // ==========================
+  // Seguimiento (Estudiante)
+  // ==========================
+  const stSegGrid = document.getElementById('seg-list');
+  const stSegQ = document.getElementById('seg-q');
+  const stSegEmpty = document.getElementById('seg-empty');
+  const stSegDetail = document.getElementById('seg-detail');
+  const stSegId = document.getElementById('seg-det-id');
+  const stSegTitle = document.getElementById('seg-title');
+  const stSegTipo = document.getElementById('seg-tipo');
+  const stSegPrio = document.getElementById('seg-prio');
+  const stSegEstado = document.getElementById('seg-estado');
+  const stSegCreado = document.getElementById('seg-creado');
+  const stSegActual = document.getElementById('seg-actual');
+  const stSegFiles = document.getElementById('seg-files');
+  const stSegTl = document.getElementById('seg-tl');
+  // File preview/download (Estudiante)
+  const stFileModal = document.getElementById('st-file-modal');
+  const stFileClose = document.getElementById('st-file-close');
+  const stFileMeta = document.getElementById('st-file-meta');
+  const stFilePreview = document.getElementById('st-file-preview');
+  const stFileDl = document.getElementById('st-file-dl');
+  let stFileCtx = { id:null, file:null };
+  function stOpenFileModal(id, file){
+    stFileCtx = { id, file };
+    if(stFileMeta) stFileMeta.textContent = `${file.name}${file.size? ' · '+file.size:''}`;
+    if(stFilePreview) stFilePreview.textContent = 'No hay vista previa disponible para este archivo.';
+    if(stFileModal) stFileModal.hidden = false;
+  }
+  function stCloseFileModal(){ stFileCtx = { id:null, file:null }; if(stFileModal) stFileModal.hidden = true; }
+  function stDownloadFile(id, file){
+    const blob = new Blob([`Contenido simulado para ${file.name} del caso ${id}`], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = file.name; document.body.appendChild(a); a.click(); URL.revokeObjectURL(url); a.remove();
+  }
+  if(stFileClose){ stFileClose.addEventListener('click', stCloseFileModal); }
+  if(stFileModal){ stFileModal.addEventListener('click', (e)=>{ if(e.target?.dataset?.close) stCloseFileModal(); }); }
+  if(stFileDl){ stFileDl.addEventListener('click', ()=>{ if(stFileCtx.file) stDownloadFile(stFileCtx.id, stFileCtx.file); }); }
+
+  let stSegRows = [
+    { id: 'C-2101', titulo: 'Cambio de carrera - Juan Pérez', tipo:'Cambio de carrera', prioridad:'Alta', estado:'Etapa 2/5', fecha:'2025-09-25', creado:'2025-09-10', actual:'2025-09-18', files:[{name:'carta.pdf', size:'120KB'}], tl:[
+      {name:'Solicitud recibida', meta:'2025-09-10 · 09:44', desc:'Tu solicitud fue registrada en el sistema.', state:'done'},
+      {name:'Revisión de documentos', meta:'2025-09-12 · 13:02', desc:'Se revisó la documentación.', state:'done'},
+      {name:'Enviado a coordinación', meta:'2025-09-17 · 10:21', desc:'En evaluación por coordinación.', state:'current'},
+      {name:'Resolución final', meta:'Pendiente', desc:'A la espera de resolución.', state:'pending'}
+    ]},
+    { id: 'C-2102', titulo: 'Homologación de materias - María López', tipo:'Homologación', prioridad:'Urgente', estado:'Etapa 3/5', fecha:'2025-09-27', creado:'2025-09-08', actual:'2025-09-19', files:[], tl:[
+      {name:'Solicitud recibida', meta:'2025-09-08 · 10:00', state:'done'},
+      {name:'Revisión de documentos', meta:'2025-09-09 · 15:10', state:'done'},
+      {name:'Enviado a coordinación', meta:'2025-09-12 · 12:20', state:'current'},
+      {name:'Resolución final', meta:'Pendiente', state:'pending'}
+    ]},
+    { id: 'C-2103', titulo: 'Certificado de matrícula - Carlos Ruiz', tipo:'Certificados académicos', prioridad:'Media', estado:'Etapa 2/5', fecha:'2025-09-22', creado:'2025-09-05', actual:'2025-09-15', files:[{name:'solicitud.pdf', size:'90KB'}], tl:[
+      {name:'Solicitud recibida', meta:'2025-09-05 · 09:44', state:'done'},
+      {name:'Revisión de documentos', meta:'2025-09-06 · 13:02', state:'current'},
+      {name:'Emisión de certificado', meta:'Pendiente', state:'pending'}
+    ]}
+  ];
+
+  let stSegFilter = '';
+  function stRenderSegList(){
+    if(!stSegGrid) return;
+    stSegGrid.innerHTML = '';
+    stSegRows
+      .filter(r => !stSegFilter || JSON.stringify(r).toLowerCase().includes(stSegFilter))
+      .forEach(r => {
+        const li = document.createElement('li');
+        li.className = 'seg-item';
+        li.dataset.id = r.id;
+        li.innerHTML = `
+          <div class="seg-it-row"><span class="seg-it-id">${r.id}</span> <span class="seg-it-title">${r.titulo}</span></div>
+          <div class="seg-it-sub">${r.tipo} · ${r.prioridad} · ${r.estado}${r.fecha? ' · vence '+r.fecha: ''}</div>
+        `;
+        stSegGrid.appendChild(li);
+      });
+    const first = stSegGrid.querySelector('.seg-item');
+    if(first){ first.click(); }
+  }
+
+  function stRenderSegDetail(row){
+    if(!row || !stSegDetail || !stSegEmpty) return;
+    stSegEmpty.hidden = true; stSegDetail.hidden = false;
+    stSegId.textContent = row.id;
+    stSegTitle.textContent = row.titulo;
+    stSegTipo.textContent = row.tipo;
+    stSegPrio.textContent = row.prioridad;
+    stSegEstado.textContent = row.estado;
+    stSegCreado.textContent = row.creado || '—';
+    stSegActual.textContent = row.actual || '—';
+    // archivos
+    stSegFiles.innerHTML = '';
+    (row.files||[]).forEach(f=>{
+      const li = document.createElement('li');
+        li.innerHTML = `<span class="file-ico">📎</span><span class="file-name">${f.name}</span><span class="file-size">${f.size||''}</span><span class="file-actions"><button class="btn-ghost btn-small js-view" type="button">Ver</button><button class="btn-primary btn-small js-dl" type="button">Descargar</button></span>`;
+      li.addEventListener('click', (ev)=>{
+        const t = ev.target;
+        if(!(t instanceof HTMLElement)) return;
+        if(t.classList.contains('js-view')){ stOpenFileModal(row.id, f); }
+        else if(t.classList.contains('js-dl')){ stDownloadFile(row.id, f); }
+      });
+      stSegFiles.appendChild(li);
+    });
+    // trazabilidad
+    stSegTl.innerHTML = '';
+    (row.tl||[]).forEach(step=>{
+      const li = document.createElement('li');
+      li.className = `tl-item ${step.state||''}`;
+      li.innerHTML = `
+        <div class="tl-dot">${step.state==='done'?'✔':step.state==='current'?'⌛':'•'}</div>
+        <div class="tl-body">
+          <div class="tl-title">${step.name||'—'}</div>
+          <div class="tl-meta">${step.meta||''}</div>
+          ${step.desc? `<div class="tl-desc">${step.desc}</div>`:''}
+        </div>`;
+      stSegTl.appendChild(li);
+    });
+  }
+
+  if(stSegGrid){
+    stRenderSegList();
+    stSegGrid.addEventListener('click', (e)=>{
+      const it = e.target.closest('.seg-item');
+      if(!it) return;
+      stSegGrid.querySelectorAll('.seg-item').forEach(x=>x.classList.remove('active'));
+      it.classList.add('active');
+      const row = stSegRows.find(r => r.id === it.dataset.id);
+      stRenderSegDetail(row);
+    });
+  }
+
+  if(stSegQ){
+    stSegQ.addEventListener('input', () => {
+      stSegFilter = (stSegQ.value||'').toLowerCase().trim();
+      stRenderSegList();
     });
   }
 
@@ -310,15 +439,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const stTramite = document.getElementById('st-tramite');
   const stCertWrap = document.getElementById('st-cert-wrap');
   const stCertTipo = document.getElementById('st-cert-tipo');
-  const stCertSem = document.getElementById('st-cert-sem');
-  const stCertSemWrap = document.getElementById('st-cert-sem-wrap');
+  const stCertTipoWrap = document.getElementById('st-cert-tipo-wrap');
+  const stEta = document.getElementById('st-eta');
+  const stReqs = document.getElementById('st-reqs');
+  const stExtra = document.getElementById('st-extra');
+  const stObsWrap = document.getElementById('st-obs-wrap');
+  const stAttachWrap = document.getElementById('st-attach-wrap');
   const stObs = document.getElementById('st-obs');
   const stDropzone = document.getElementById('st-dropzone');
   const stFileInput = document.getElementById('st-file-input');
   const stDzList = document.getElementById('st-dz-list');
   const stCancel = document.getElementById('st-cancel');
-  const stReqList = document.getElementById('st-req-list');
-  const stTiempo = document.getElementById('st-tiempo');
 
   let stFilter = '';
   let stTipo = '';
@@ -327,19 +458,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Catálogo de trámites (demo)
   const catalogo = [
-    { id:'S-2001', icon:'✈️', titulo:'Certificados académicos', desc:'Notas, récord y constancias', tipo:'Certificados académicos', prioridad:'Media', estado:'Disponible' },
-    { id:'S-2002', icon:'📜', titulo:'Homologación de materias', desc:'Evalúa asignaturas cursadas', tipo:'Homologación', prioridad:'Alta', estado:'Requiere revisión' },
-    { id:'S-2003', icon:'🔄', titulo:'Cambio de carrera', desc:'Traslado a otra carrera', tipo:'Cambio de carrera', prioridad:'Alta', estado:'Disponible' },
-    { id:'S-2004', icon:'🔁', titulo:'Cambio de paralelo', desc:'Cambia tu horario o grupo', tipo:'Otro', prioridad:'Baja', estado:'Disponible' },
-    { id:'S-2005', icon:'🪪', titulo:'Carné estudiantil', desc:'Genera o renueva tu carné', tipo:'Otro', prioridad:'Baja', estado:'Disponible' },
-    { id:'S-2006', icon:'🧑\u200d🎓', titulo:'Aval de prácticas', desc:'Aprobación de prácticas', tipo:'Otro', prioridad:'Media', estado:'Disponible' },
-    { id:'S-2007', icon:'📨', titulo:'Reactivación de matrícula', desc:'Reingreso tras suspensión', tipo:'Otro', prioridad:'Media', estado:'Requiere revisión' },
-    { id:'S-2008', icon:'🧮', titulo:'Corrección de notas', desc:'Rectifica calificaciones', tipo:'Otro', prioridad:'Urgente', estado:'Disponible' },
-    { id:'S-2009', icon:'🎓', titulo:'Solicitud de titulación', desc:'Proceso de titulación', tipo:'Otro', prioridad:'Alta', estado:'Disponible' },
-    { id:'S-2010', icon:'🧑\u200d🏫', titulo:'Validación de sílabo', desc:'Verifica contenidos', tipo:'Otro', prioridad:'Media', estado:'Requiere revisión' },
-    { id:'S-2011', icon:'💳', titulo:'Solicitud de beca', desc:'Aplica a becas y ayudas', tipo:'Otro', prioridad:'Alta', estado:'Disponible' },
-    { id:'S-2012', icon:'📝', titulo:'Certificado de conducta', desc:'Emisión de conducta', tipo:'Certificados académicos', prioridad:'Media', estado:'Disponible' },
+    { id:'S-2001', icon:'✈️', titulo:'Certificados académicos', desc:'Notas, récord y constancias', tipo:'Certificados académicos', prioridad:'Media', estado:'Disponible', eta:'1-3 días hábiles', reqs:['Cédula o pasaporte','Matrícula vigente','Comprobante de pago'] },
+    { id:'S-2002', icon:'📜', titulo:'Homologación de materias', desc:'Evalúa asignaturas cursadas', tipo:'Homologación', prioridad:'Alta', estado:'Requiere revisión', eta:'7-15 días hábiles', reqs:['Solicitud de homologación firmada','Sílabo de asignatura','Certificado de calificaciones'] },
+    { id:'S-2003', icon:'🔄', titulo:'Cambio de carrera', desc:'Traslado a otra carrera', tipo:'Cambio de carrera', prioridad:'Alta', estado:'Disponible', eta:'10-20 días hábiles', reqs:['Carta de solicitud','Motivación del cambio','Historial académico'] },
+    { id:'S-2004', icon:'🔁', titulo:'Cambio de paralelo', desc:'Cambia tu horario o grupo', tipo:'Otro', prioridad:'Baja', estado:'Disponible', eta:'1-3 días hábiles', reqs:['Carta de solicitud','Justificación del cambio'] },
+    { id:'S-2005', icon:'🪪', titulo:'Carné estudiantil', desc:'Genera o renueva tu carné', tipo:'Otro', prioridad:'Baja', estado:'Disponible', eta:'1-5 días hábiles', reqs:['Foto actualizada','Documento de identidad'] },
+    { id:'S-2006', icon:'🧑\u200d🎓', titulo:'Aval de prácticas', desc:'Aprobación de prácticas', tipo:'Otro', prioridad:'Media', estado:'Disponible', eta:'5-10 días hábiles', reqs:['Carta de la empresa','Plan de prácticas'] },
+    { id:'S-2007', icon:'📨', titulo:'Reactivación de matrícula', desc:'Reingreso tras suspensión', tipo:'Otro', prioridad:'Media', estado:'Requiere revisión', eta:'3-7 días hábiles', reqs:['Solicitud de reactivación','Justificación'] },
+    { id:'S-2008', icon:'🧮', titulo:'Corrección de notas', desc:'Rectifica calificaciones', tipo:'Otro', prioridad:'Urgente', estado:'Disponible', eta:'1-3 días hábiles', reqs:['Evidencia de evaluación','Formulario de corrección'] },
+    { id:'S-2009', icon:'🎓', titulo:'Solicitud de titulación', desc:'Proceso de titulación', tipo:'Otro', prioridad:'Alta', estado:'Disponible', eta:'15-30 días hábiles', reqs:['Solicitud de titulación','Cumplimiento de requisitos previos'] },
+    { id:'S-2010', icon:'🧑\u200d🏫', titulo:'Validación de sílabo', desc:'Verifica contenidos', tipo:'Otro', prioridad:'Media', estado:'Requiere revisión', eta:'3-5 días hábiles', reqs:['Sílabo','Solicitud de validación'] },
+    { id:'S-2011', icon:'💳', titulo:'Solicitud de beca', desc:'Aplica a becas y ayudas', tipo:'Otro', prioridad:'Alta', estado:'Disponible', eta:'10-20 días hábiles', reqs:['Formulario de beca','Soporte socioeconómico'] },
+    { id:'S-2012', icon:'📝', titulo:'Certificado de conducta', desc:'Emisión de conducta', tipo:'Certificados académicos', prioridad:'Media', estado:'Disponible', eta:'1-3 días hábiles', reqs:['Documento de identidad'] },
   ];
+
+  // Eliminado: generación de semestres (no se usa)
 
   function renderStudentCards(){
     if(!sgrid) return;
@@ -368,6 +501,93 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   renderStudentCards();
 
+  // =============================
+  // Trámite → esquema de campos
+  // =============================
+  // Definición simple por tipo/título: qué campos mostrar y sus props
+  const formSchemas = {
+    'Certificados académicos': {
+      showCert: true,
+      showObs: false,
+      showAttach: true,
+      extra: [],
+      cert: { showTipo: true }
+    },
+    'Homologación': {
+      showCert: false,
+      showObs: true,
+      showAttach: true,
+      extra: [
+        { kind:'text', id:'st-hom-asig', label:'Asignatura a homologar', placeholder:'Nombre de la asignatura' },
+        { kind:'text', id:'st-hom-univ', label:'Institución de procedencia', placeholder:'Universidad/Instituto' }
+      ]
+    },
+    'Cambio de carrera': {
+      showCert: false,
+      showObs: true,
+      showAttach: true,
+      extra: [
+        { kind:'select', id:'st-carr-nueva', label:'Carrera destino', options:['Ingeniería de Software','Ingeniería Industrial','Administración','Contabilidad'] },
+        { kind:'select', id:'st-carr-motivo', label:'Motivo', options:['Interés vocacional','Cambio de horario','Desempeño académico','Otros'] }
+      ]
+    },
+    'Otro': {
+      showCert: false,
+      showObs: true,
+      showAttach: true,
+      extra: []
+    }
+  };
+
+  // Overrides por ID de trámite (para afinar qué mostrar/ocultar)
+  const idOverrides = {
+    'S-2004': { showObs:false }, // Cambio de paralelo
+    'S-2005': { showObs:false }, // Carné estudiantil
+    'S-2007': { showObs:false }, // Reactivación de matrícula
+    'S-2008': { showObs:false }, // Corrección de notas
+    'S-2009': { showObs:false }, // Solicitud de titulación
+    'S-2010': { showObs:false }, // Validación de sílabo
+    'S-2011': { showObs:false }, // Beca
+    'S-2012': { showObs:false }, // Certificado de conducta
+  };
+
+  function getSchemaFor(item){
+    // Base por tipo o fallback a 'Otro'
+    const base = formSchemas[item?.tipo] || formSchemas['Otro'];
+    // Aplicar overrides por ID si existen
+    const ov = idOverrides[item?.id] || {};
+    // Derivar showAttach desde reqs si no está explícito
+    const hasReqs = Array.isArray(item?.reqs) && item.reqs.length > 0;
+    return {
+      ...base,
+      ...ov,
+      showAttach: ov.showAttach ?? base.showAttach ?? hasReqs,
+  cert: { ...(base.cert||{}), ...(ov.cert||{}) }
+    };
+  }
+
+  function renderExtraFields(schema){
+    if(!stExtra) return;
+    stExtra.innerHTML = '';
+    (schema.extra||[]).forEach(f => {
+      const wrap = document.createElement('div');
+      wrap.className = 'field';
+      if(f.kind === 'text'){
+        wrap.innerHTML = `<span class="label">${f.label}</span><input id="${f.id}" class="select" placeholder="${f.placeholder||''}" />`;
+      } else if (f.kind === 'select'){
+        const opts = (f.options||[]).map(o => `<option>${o}</option>`).join('');
+        wrap.innerHTML = `<span class="label">${f.label}</span><select id="${f.id}" class="select">${opts}</select>`;
+      } else if (f.kind === 'textarea'){
+        wrap.innerHTML = `<span class="label">${f.label}</span><textarea id="${f.id}" class="textarea" placeholder="${f.placeholder||''}"></textarea>`;
+      }
+      stExtra.appendChild(wrap);
+    });
+    // ocultar contenedor si no hay campos
+    const has = (schema.extra||[]).length > 0;
+    stExtra.parentElement && (stExtra.parentElement.hidden = false);
+    stExtra.hidden = !has;
+  }
+
   // Filtros
   if (stBuscar){ stBuscar.addEventListener('input', ()=>{ stFilter = stBuscar.value.trim().toLowerCase(); renderStudentCards(); }); }
   if (stFilTipo){ stFilTipo.addEventListener('change', ()=>{ stTipo = stFilTipo.value; renderStudentCards(); }); }
@@ -385,73 +605,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Abrir modal al seleccionar un trámite
   function openStModal(){ if(stModal) stModal.hidden = false; }
   function closeStModal(){ if(stModal) stModal.hidden = true; }
-  function setReqs(list){ if(!stReqList) return; stReqList.innerHTML = ''; (list||[]).forEach(txt => { const li = document.createElement('li'); li.textContent = txt; stReqList.appendChild(li); }); }
-  function setTiempo(txt){ if(stTiempo) stTiempo.value = txt || '—'; }
-
-  // Definición de requisitos y tiempos estimados por trámite
-  const TRAMITE_META = {
-    'Certificados académicos': {
-      tiempo: '1 - 3 días hábiles',
-      reqs: (subtipo)=>{
-        const base = ['Documento de identidad', 'Comprobante de pago'];
-        if(subtipo === 'Certificado de notas') return [...base, 'Detalle de periodos/semestres a incluir'];
-        if(subtipo === 'Récord académico') return [...base];
-        if(subtipo === 'Constancia de estudios') return [...base];
-        return base;
-      },
-      showSem: (subtipo)=> subtipo === 'Certificado de notas'
-    },
-    'Homologación': {
-      tiempo: '7 - 15 días hábiles',
-      reqs: ['Solicitud de homologación firmada', 'Sílabo(s) o programa(s) oficial(es)', 'Certificado de calificaciones'],
-      showSem: false
-    },
-    'Cambio de carrera': {
-      tiempo: '10 - 20 días hábiles',
-      reqs: ['Carta de solicitud', 'Motivos y plan académico', 'Historial académico'],
-      showSem: false
-    },
-    'Cambio de paralelo': {
-      tiempo: '1 - 5 días hábiles',
-      reqs: ['Carta de solicitud', 'Justificación de horarios/razones'],
-      showSem: false
-    },
-    'Solicitud de beca': {
-      tiempo: '5 - 15 días hábiles',
-      reqs: ['Formulario de beca', 'Soportes económicos', 'Certificado de notas'],
-      showSem: false
-    },
-    'Corrección de notas': {
-      tiempo: '3 - 7 días hábiles',
-      reqs: ['Solicitud de corrección', 'Evidencia del error', 'Aval del docente (si aplica)'],
-      showSem: false
-    },
-    'Validación de sílabo': {
-      tiempo: '3 - 5 días hábiles',
-      reqs: ['Sílabo a validar', 'Referencia de asignatura'],
-      showSem: false
-    },
-    'Reactivación de matrícula': {
-      tiempo: '3 - 7 días hábiles',
-      reqs: ['Solicitud de reingreso', 'Justificativo de suspensión', 'Plan de continuidad'],
-      showSem: false
-    },
-    'Carné estudiantil': {
-      tiempo: '1 - 3 días hábiles',
-      reqs: ['Foto tipo carnet', 'Comprobante de pago'],
-      showSem: false
-    },
-    'Solicitud de titulación': {
-      tiempo: '15 - 30 días hábiles',
-      reqs: ['Plan de titulación', 'Certificado de no adeudar', 'Historial académico'],
-      showSem: false
-    },
-    'Certificado de conducta': {
-      tiempo: '1 - 3 días hábiles',
-      reqs: ['Documento de identidad'],
-      showSem: false
-    }
-  };
   if (sgrid){
     sgrid.addEventListener('click', (e)=>{
       const btn = e.target.closest('.soli-card');
@@ -462,21 +615,43 @@ document.addEventListener('DOMContentLoaded', () => {
       stId.value = item.id;
       stTramite.value = item.titulo;
       stObs.value = '';
-      // Campos específicos para certificados
-      const isCert = item.tipo === 'Certificados académicos';
+      // ETA and requisitos
+      if(stEta) stEta.value = item.eta || '—';
+      if(stReqs){
+        stReqs.innerHTML = '';
+        (item.reqs||[]).forEach(r => {
+          const li = document.createElement('li');
+          li.innerHTML = `<span class="file-ico">📌</span><span class="file-name">${r}</span>`;
+          stReqs.appendChild(li);
+        });
+      }
+      // Mostrar/ocultar campos según esquema
+      const schema = getSchemaFor(item);
+      // Solo permitir "Tipo de certificado" en el PRIMER trámite del catálogo (p. ej. S-2001)
+      const firstId = catalogo[0]?.id;
+      const isCert = !!schema.showCert && item.id === firstId;
       stCertWrap.hidden = !isCert;
       if(isCert){
         stCertTipo.value = 'Seleccione una opción';
-        stCertSem.value = 'Seleccione una opción';
-        if(stCertSemWrap) stCertSemWrap.hidden = true; // Mostrar según subtipo elegido
+        const certCfg = schema.cert || {};
+        if(stCertTipoWrap) stCertTipoWrap.hidden = certCfg.showTipo === false;
+      } else {
+        // Asegurar que no queden valores residuales cuando no aplica
+        if(stCertTipo) stCertTipo.value = 'Seleccione una opción';
+        if(stCertTipoWrap) stCertTipoWrap.hidden = true;
       }
-      // Documentos y tiempo
-      const meta = TRAMITE_META[item.tipo] || TRAMITE_META[item.titulo] || null;
-      if(meta){
-        const reqs = typeof meta.reqs === 'function' ? meta.reqs(stCertTipo?.value) : meta.reqs;
-        setReqs(reqs);
-        setTiempo(meta.tiempo);
-      } else { setReqs([]); setTiempo('—'); }
+      // Render extra fields
+      renderExtraFields(schema);
+      // Observaciones / Adjuntos (eliminar visualmente lo que no corresponda)
+      if(stObsWrap){
+        stObsWrap.hidden = schema.showObs === false;
+        if(schema.showObs === false) { stObs.value = ''; }
+      }
+      if(stAttachWrap){
+        const showAt = schema.showAttach !== false;
+        stAttachWrap.hidden = !showAt;
+        if(!showAt && stDzList){ stDzList.innerHTML = ''; }
+      }
       // Limpiar adjuntos previos
       if(stDzList) stDzList.innerHTML = '';
       openStModal();
@@ -508,33 +683,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Reaccionar al subtipo de certificado para mostrar/ocultar semestre y refrescar requisitos
-  if(stCertTipo){
-    stCertTipo.addEventListener('change', ()=>{
-      const subtipo = stCertTipo.value;
-      if(stCertSemWrap){ stCertSemWrap.hidden = !TRAMITE_META['Certificados académicos'].showSem(subtipo); }
-      const reqs = TRAMITE_META['Certificados académicos'].reqs(subtipo);
-      setReqs(reqs);
-    });
-  }
-
   if (stForm){
     stForm.addEventListener('submit', (e)=>{
       e.preventDefault();
       const id = stId.value;
       const tramite = stTramite.value;
-      // Validar si se requiere seleccionar subtipo/semestre
-      if(!stCertWrap.hidden){
-        const subtipo = stCertTipo.value;
-        if(subtipo === 'Seleccione una opción'){
-          showStatus('Selecciona el tipo de certificado','warn');
-          return;
-        }
-        if(!stCertSemWrap.hidden && stCertSem.value === 'Seleccione una opción'){
-          showStatus('Selecciona el semestre a incluir','warn');
-          return;
-        }
-      }
   showStatus(`Solicitud enviada: ${tramite} (Ref: ${id})`, 'success');
       closeStModal();
     });
