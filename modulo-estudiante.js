@@ -627,18 +627,12 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       // Mostrar/ocultar campos según esquema
       const schema = getSchemaFor(item);
-      // Solo permitir "Tipo de certificado" en el PRIMER trámite del catálogo (p. ej. S-2001)
-      const firstId = catalogo[0]?.id;
-      const isCert = !!schema.showCert && item.id === firstId;
+      const isCert = !!schema.showCert && item.tipo === 'Certificados académicos';
       stCertWrap.hidden = !isCert;
       if(isCert){
         stCertTipo.value = 'Seleccione una opción';
         const certCfg = schema.cert || {};
         if(stCertTipoWrap) stCertTipoWrap.hidden = certCfg.showTipo === false;
-      } else {
-        // Asegurar que no queden valores residuales cuando no aplica
-        if(stCertTipo) stCertTipo.value = 'Seleccione una opción';
-        if(stCertTipoWrap) stCertTipoWrap.hidden = true;
       }
       // Render extra fields
       renderExtraFields(schema);

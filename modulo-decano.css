@@ -10,7 +10,11 @@
 *{box-sizing:border-box}
 body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:var(--bg)}
 .layout{display:grid;grid-template-columns:260px 1fr;height:100vh;overflow:hidden}
-  #co-nuevo{ padding:8px 12px; margin-bottom:2px }
+
+.content-sidebar
+{
+  display: flex;
+}
 
 .sidebar
 {
@@ -19,12 +23,22 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-ser
   display:flex;
   flex-direction:column;
   height:95vh;
-  #co-fil-clear{ padding:8px 12px; background:#000; color:#fff; border:1px solid rgba(0,0,0,.2); border-radius:8px; margin-bottom:2px }
+  /* border-right: solid 1px #e5e7eb; */
+  border-radius: 18px;
+}
+
+.brand-bar{display:flex;align-items:center;gap:10px;padding:16px 16px;}
+.brand-bar img{height:42px}
+.brand-sub{font-size:11px;color:#cbd5e1}
+.nav{padding:14px}
 .nav__section
 {
     margin:14px 8px 8px;
     color:#000000;
-  #co-cfg-reset{ border:1px solid rgba(0,0,0,.2); padding:8px 12px; border-radius:8px }
+    font-size:12px;
+}
+.nav__item
+{
     display:block;
     color:#000000;
     text-decoration:none;
@@ -33,21 +47,38 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-ser
     font-weight: 600;
 }
     
-  #rep-clear{ background:#000; color:#fff; border:1px solid rgba(0,0,0,.2); padding:8px 12px; border-radius:8px }
+.nav__item:hover
+{
+    background:#d6d6d6;
+}
+.nav__item.active
+{
+    background:var(--accent);color:#ffffff;font-weight:700;
+}
 .user{margin-top:auto;display:flex;align-items:center;gap:10px;padding:12px;}
 .avatar{width:34px;height:34px;border-radius:50%;background:#7c7c7c;display:grid;place-items:center}
 .user__name{font-weight:700;font-size:13px}
 .user__role{font-size:11px;color:#9aa6b2}
 .power{margin-left:auto;background:transparent;border:none;color:#cbd5e1;font-size:18px;cursor:pointer}
 .power svg{width:20px;height:20px;display:block}
-  #rep-print{ border:1px solid rgba(0,0,0,.2); padding:8px 12px; border-radius:8px; font-weight:600; background:#fff }
+
+.content{padding:22px;height:100vh;overflow:auto}
+.top
+{
+    display:flex;
+    align-items:center;
     margin-bottom:14px;
 }
 
 .top h1
 {
     font-size:30px;
-  #rep-export{ border:1px solid rgba(0,0,0,.2); padding:8px 12px; border-radius:8px; background:#fff }
+    margin:0 0 6px;
+}
+
+/* Views */
+.view{display:none}
+.view--active{display:block}
 
 /* Panels */
 .panel{background:var(--panel);border-radius:12px;padding:12px}
